@@ -1,0 +1,5 @@
+# Ignore Python bytecode files
+*.pyc
+
+# Remove MacOS system files
+Icon?
