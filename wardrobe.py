@@ -5,9 +5,7 @@ class wardrobe:
     """
     Wardrobe class provides clothing recommendations based on temperature.
     """
-
-    def __init__(self) -> None:
-        self.CLOTHING_RANGES: List[Dict[str, Any]] = [
+    CLOTHING_RANGES: List[Dict[str, Any]] = [
             {"temp_low": 90, "temp_high": float('inf'), "num_clothing_pieces": 2},
             {"temp_low": 80, "temp_high": 90, "num_clothing_pieces": 3},
             {"temp_low": 70, "temp_high": 80, "num_clothing_pieces": 4},
@@ -17,8 +15,8 @@ class wardrobe:
             {"temp_low": 15, "temp_high": 30, "num_clothing_pieces": 8},
             {"temp_low": float('-inf'), "temp_high": 15, "num_clothing_pieces": 9}
         ]
-
-        self.CLOTHING_OPTIONS: Dict[int, List[Union[str, List[str]]]] = {
+    
+    CLOTHING_OPTIONS: Dict[int, List[Union[str, List[str]]]] = {
             2: ["Short Sleeve", "Shorts"],
             3: ["Short Sleeve", "Shorts", "Socks"],
             4: [
@@ -34,6 +32,9 @@ class wardrobe:
             8: ["Jacket", "Long Sleeve", "Pants", "Socks", "Gloves"],
             9: ["Coat", "Long Sleeve", "Pants", "Socks", "Gloves"]
         }
+
+    def __init__(self) -> None:
+        pass
 
     def _get_num_clothing_pieces(self, temperature: float) -> int:
         """

@@ -7,7 +7,7 @@ spacer_text = "\n----------------------------------------------------\n"
 app_ui = ui.page_fluid(
     ui.input_text("city", "Enter your city:", value=""),
     ui.input_text("state_abb", "Enter your state (e.g. UT)", value=""),
-    ui.input_action_button("run_btn", "Run"),
+    ui.input_action_button("run_btn", "Recommend Clothing"),
     ui.output_text_verbatim("output_text")
 )
 
@@ -35,7 +35,10 @@ def server(input, output, session):
         lines.append(spacer_text)
         lines.append("First, let's get your location to find the current temperature.")
         
-        temp = my_thermometer.get().find_temperature(method="api", city=input.city(), state_abbr=input.state_abb())
+        try:
+            temp = my_thermometer.get().find_temperature(city=input.city(), state_abbr=input.state_abb())
+        except Exception as e:
+            lines.append(f"Error fetching temperature from API: {e}")
 
         print(temp)
         
