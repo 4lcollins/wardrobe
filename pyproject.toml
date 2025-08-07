@@ -1,0 +1,30 @@
+[project]
+name = "wardrobe"
+version = "1.0.0"
+description = "A personal clothing management app to organize, track, and plan your outfits"
+
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+  "requests",
+  "uvicorn",
+  "python-dotenv",  # 'dotenv' is actually 'python-dotenv' on PyPI
+  "pytest",
+  "pandas",
+  "shiny>=0.2.7"
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+addopts = "--import-mode=importlib"
+pythonpath = ["src"]
+testpaths = ["tests"]
