@@ -1,5 +1,11 @@
-# Ignore Python bytecode files
+# Generic files
 *.pyc
+*.egg-info/
 
-# Remove MacOS system files
+# Testing
+.venv/
+.env
+
+# macOS
+.DS_Store
 Icon?

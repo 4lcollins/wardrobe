@@ -1,17 +1,10 @@
-from shiny import App, ui, render, reactive
-from thermometer import thermometer
-from wardrobe import wardrobe
+from shiny import render, reactive
+from src.models.thermometer import thermometer
+from src.models.wardrobe_recommender import wardrobe_recommender
 
 spacer_text = "\n----------------------------------------------------\n"
 
-app_ui = ui.page_fluid(
-    ui.input_text("city", "Enter your city:", value=""),
-    ui.input_text("state_abb", "Enter your state (e.g. UT)", value=""),
-    ui.input_action_button("run_btn", "Recommend Clothing"),
-    ui.output_text_verbatim("output_text")
-)
-
-def server(input, output, session):
+def app_server(input, output, session):
     my_thermometer = reactive.value(None)
     my_wardrobe = reactive.value(None)
 
@@ -20,13 +13,13 @@ def server(input, output, session):
         if my_thermometer.get() is None:
             my_thermometer.set(thermometer(verbose=True))
         if my_wardrobe.get() is None:
-            my_wardrobe.set(wardrobe())
+            my_wardrobe.set(wardrobe_recommender())
 
     @render.text
     @reactive.event(input.run_btn)
     def output_text():
         if not input.city() or not input.state_abb():
-            return "Please enter your city and state."
+            return "aaaPlease enter your city and state."
         
         lines = []
         lines.append(spacer_text)
@@ -53,5 +46,3 @@ def server(input, output, session):
             lines.append(f"- {item}")
         
         return "\n".join(lines)
-
-app = App(app_ui, server)

@@ -1,13 +1,12 @@
-import os
 import requests
-import keyring
-from typing import Optional, Dict
+from typing import Dict
+from src.config import CONFIG
 
 class thermometer:
     def __init__(self, verbose: bool = True):
-        self.api_key = os.getenv("OPEN-WEATHER-MAP_API", keyring.get_password("OpenWeatherMap", "api_key"))
+        self.api_key = CONFIG.OPEN_WEATHER_MAP_KEY
         if not self.api_key:
-            raise ValueError("API Key not found. Please set it using os.environ['OPEN-WEATHER-MAP_API'] = 'YOUR_API_KEY or keyring.set_password('OpenWeatherMap', 'api_key', 'YOUR_API_KEY')")
+            raise ValueError("API Key not found. Please set it using os.environ['OPENWEATHERMAP_API_SHARED'] = 'YOUR_API_KEY")
         self.temperature_api_url = "https://api.openweathermap.org/data/3.0/onecall"
         self.geocode_api_url = "https://api.openweathermap.org/geo/1.0/direct"
         self.verbose = verbose

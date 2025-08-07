@@ -1,7 +1,7 @@
 import random
 from typing import List, Union, Dict, Any
 
-class wardrobe:
+class wardrobe_recommender:
     """
     Wardrobe class provides clothing recommendations based on temperature.
     """
