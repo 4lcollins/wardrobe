@@ -11,7 +11,9 @@ dependencies = [
   "python-dotenv",  # 'dotenv' is actually 'python-dotenv' on PyPI
   "pytest",
   "pandas",
-  "shiny>=0.2.7"
+  "shiny>=0.2.7",
+  "pydantic-settings",
+  "PyYAML"
 ]
 
 [build-system]

@@ -1,6 +1,6 @@
 from shiny import render, reactive
-from src.models.thermometer import thermometer
-from src.models.wardrobe_recommender import wardrobe_recommender
+from src.core.thermometer import thermometer
+from src.core.stylist import stylist
 
 spacer_text = "\n----------------------------------------------------\n"
 
@@ -13,7 +13,7 @@ def app_server(input, output, session):
         if my_thermometer.get() is None:
             my_thermometer.set(thermometer(verbose=True))
         if my_wardrobe.get() is None:
-            my_wardrobe.set(wardrobe_recommender())
+            my_wardrobe.set(stylist())
 
     @render.text
     @reactive.event(input.run_btn)

@@ -1,4 +1,4 @@
-from models.wardrobe import wardrobe
+from core.wardrobe import wardrobe
 
 def test_wardrobe_basic():
     w = wardrobe()

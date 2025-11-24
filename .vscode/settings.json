@@ -3,5 +3,10 @@
         "tests"
     ],
     "python.testing.unittestEnabled": false,
-    "python.testing.pytestEnabled": true
+    "python.testing.pytestEnabled": true,
+    "github.copilot.nextEditSuggestions.enabled": true,
+    "editor.inlineSuggest.edits.showCollapsed": true,
+    "editor.tokenColorCustomizations": {
+    
+    }
 }

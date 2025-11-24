@@ -1,22 +1,13 @@
 import random
+import math
 from typing import List, Union, Dict, Any
 
-class wardrobe_recommender:
+class stylist:
     """
     Wardrobe class provides clothing recommendations based on temperature.
-    """
-    CLOTHING_RANGES: List[Dict[str, Any]] = [
-            {"temp_low": 90, "temp_high": float('inf'), "num_clothing_pieces": 2},
-            {"temp_low": 80, "temp_high": 90, "num_clothing_pieces": 3},
-            {"temp_low": 70, "temp_high": 80, "num_clothing_pieces": 4},
-            {"temp_low": 60, "temp_high": 70, "num_clothing_pieces": 5},
-            {"temp_low": 45, "temp_high": 60, "num_clothing_pieces": 6},
-            {"temp_low": 30, "temp_high": 45, "num_clothing_pieces": 7},
-            {"temp_low": 15, "temp_high": 30, "num_clothing_pieces": 8},
-            {"temp_low": float('-inf'), "temp_high": 15, "num_clothing_pieces": 9}
-        ]
-    
+    """    
     CLOTHING_OPTIONS: Dict[int, List[Union[str, List[str]]]] = {
+            1: ["Shorts"],
             2: ["Short Sleeve", "Shorts"],
             3: ["Short Sleeve", "Shorts", "Socks"],
             4: [
@@ -36,7 +27,7 @@ class wardrobe_recommender:
     def __init__(self) -> None:
         pass
 
-    def _get_num_clothing_pieces(self, temperature: float) -> int:
+    def get_num_clothing_pieces(self, temperature: float) -> int:
         """
         Returns the recommended number of clothing pieces for a given temperature.
 
@@ -46,13 +37,14 @@ class wardrobe_recommender:
         Returns:
             int: Number of clothing pieces recommended.
         """
-        for range in self.CLOTHING_RANGES:
-            if range["temp_low"] <= temperature < range["temp_high"]:
-                return range["num_clothing_pieces"]
-        # Fallback in case no range matches
-        raise ValueError("Temperature out of expected range.")
+        num_clothing_pieces_raw = math.ceil(11 - temperature / 10)
 
-    def recommend_clothing(self, daily_temp_high: float) -> List[str]:
+        # Ensure at least 1 clothing item
+        num_clothing_pieces_adjusted = max(num_clothing_pieces_raw, 1)
+
+        return num_clothing_pieces_adjusted
+
+    def recommend_clothing(self, num_clothing_pieces: int) -> List[str]:
         """
         Recommends clothing items based on the daily high temperature.
 
@@ -62,12 +54,10 @@ class wardrobe_recommender:
         Returns:
             List[str]: List of recommended clothing items.
         """
-        num_pieces = self._get_num_clothing_pieces(daily_temp_high)
-        clothing_options = self.CLOTHING_OPTIONS.get(num_pieces, [])
+        clothing_options = self.CLOTHING_OPTIONS.get(num_clothing_pieces, [])
 
         # If multiple options, randomly pick one
         if isinstance(clothing_options[0], list):
             return random.choice(clothing_options)
         else:
             return clothing_options
-
