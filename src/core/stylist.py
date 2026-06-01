@@ -1,12 +1,11 @@
 import random
 import math
-from typing import List, Union, Dict, Any
 
-class stylist:
+class Stylist:
     """
     Wardrobe class provides clothing recommendations based on temperature.
     """    
-    CLOTHING_OPTIONS: Dict[int, List[Union[str, List[str]]]] = {
+    CLOTHING_OPTIONS: dict[int, list[str | list[str]]] = {
             1: ["Shorts"],
             2: ["Short Sleeve", "Shorts"],
             3: ["Short Sleeve", "Shorts", "Socks"],
@@ -24,40 +23,41 @@ class stylist:
             9: ["Coat", "Long Sleeve", "Pants", "Socks", "Gloves"]
         }
 
-    def __init__(self) -> None:
-        pass
+    def __init__(self, thermometer) -> None:
+        self.thermometer = thermometer
 
-    def get_num_clothing_pieces(self, temperature: float) -> int:
+    def _get_num_clothing_pieces(self, temperature: float) -> int:
         """
         Returns the recommended number of clothing pieces for a given temperature.
-
-        Args:
-            temperature (float): The temperature to evaluate.
-
-        Returns:
-            int: Number of clothing pieces recommended.
         """
         num_clothing_pieces_raw = math.ceil(11 - temperature / 10)
 
-        # Ensure at least 1 clothing item
-        num_clothing_pieces_adjusted = max(num_clothing_pieces_raw, 1)
+        # Keep recommendations within the configured clothing options.
+        num_clothing_pieces_adjusted = min(max(num_clothing_pieces_raw, 1), max(self.CLOTHING_OPTIONS))
 
         return num_clothing_pieces_adjusted
 
-    def recommend_clothing(self, num_clothing_pieces: int) -> List[str]:
+    def recommend_clothing(self, temperature: float) -> list[str]:
         """
         Recommends clothing items based on the daily high temperature.
 
         Args:
-            daily_temp_high (float): The day's high temperature.
+            temperature (float): The temperature to recommend clothing for.
 
         Returns:
-            List[str]: List of recommended clothing items.
+            dict: 
+                "num_clothing_pieces": Calculated number of clothing pieces to wear
+                "clothing_options": Stylized clothing options based on temperature
         """
+        num_clothing_pieces = self._get_num_clothing_pieces(temperature)
+
         clothing_options = self.CLOTHING_OPTIONS.get(num_clothing_pieces, [])
 
         # If multiple options, randomly pick one
         if isinstance(clothing_options[0], list):
-            return random.choice(clothing_options)
-        else:
-            return clothing_options
+            clothing_options =  random.choice(clothing_options)
+
+        return {
+            "num_clothing_pieces": num_clothing_pieces,
+            "clothing_options": clothing_options
+        }

@@ -1,9 +1,9 @@
 import requests
-from typing import Dict, List
-from settings import SETTINGS
 from datetime import datetime
 
-class thermometer:
+from src.settings import SETTINGS
+
+class Thermometer:
     def __init__(self, city, state_abbr, verbose: bool = True):
         self.api_key = SETTINGS.openweathermap_key
         if not self.api_key:
@@ -14,7 +14,10 @@ class thermometer:
         self.state_abbr = state_abbr
         self.verbose = verbose
 
-    def __get_location_coordinates_api(self) -> Dict[str, float]:
+        self.low_temp = None
+        self.high_temp = None
+
+    def __get_location_coordinates_api(self) -> dict[str, float]:
         """
         Fetch the latitude and longitude of a given city using OpenWeatherMap API.
         Returns a dict with 'lat' and 'lon'.
@@ -35,7 +38,7 @@ class thermometer:
             return {"lat": lat, "lon": lon}
         raise ValueError("Location Not Found")
 
-    def get_temperature(self, temp_option: str) -> Dict:
+    def get_temperature(self, temp_option: str) -> dict:
         """
         Fetch the 'feels like' temperature for a given city using OpenWeatherMap API.
         Returns the temperature in Fahrenheit.
@@ -59,7 +62,9 @@ class thermometer:
 
         return today
 
-    def get_low_high(self) -> List[float]:
+    def get_low_high(self) -> list[float]:
+        if self.low_temp and self.high_temp:
+            return [self.low_temp, self.high_temp]
         hourly_temperature = self.get_temperature("hourly")
 
         # determine hours remaining in the current local day (include current partial hour)
@@ -68,7 +73,7 @@ class thermometer:
 
         temps_list = [h.get("feels_like") for h in hourly_temperature_today]
 
-        low_temp = min(temps_list)
-        high_temp = max(temps_list)
+        self.low_temp = min(temps_list)
+        self.high_temp = max(temps_list)
 
-        return [low_temp, high_temp]
+        return [self.low_temp, self.high_temp]

@@ -1,8 +1,6 @@
-import csv
 import pandas as pd
-from shiny import App, ui, render
 
-class wardrobe:
+class Wardrobe:
     def __init__(self):
         self.clothing_categories = self.__load_file("clothing_categories")
         
@@ -12,18 +10,3 @@ class wardrobe:
             return pd.read_csv(data_file)
         except FileNotFoundError:
             print(f"Data file {data_file} not found.")
-
-my_wardrobe = wardrobe()
-
-app_ui = ui.page_fluid(
-    ui.h2("Wardrobe Clothing Categories"),
-    ui.output_data_frame("categories_df")
-)
-
-def server(input, output, session):
-    @output
-    @render.data_frame
-    def categories_df():
-        return my_wardrobe.clothing_categories
-
-app = App(app_ui, server)
