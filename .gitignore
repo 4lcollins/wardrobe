@@ -1,11 +1,18 @@
-# Generic files
+# Python artifacts
 *.pyc
+*.pyo
+*.pyd
+__pycache__/
 *.egg-info/
-*.vscode/
 
-# Testing
+# Virtual environments
 .venv/
 .env
+src/config/shinyapps.env
+
+# IDE / editor
+.vscode/
+.posit/
 
 # macOS
 .DS_Store

@@ -1,7 +1,7 @@
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from settings import SETTINGS
+from src.settings import SETTINGS
 
 def send_email(subject, body, receiver_email):
     # Email details
