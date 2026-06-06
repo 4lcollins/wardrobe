@@ -17,4 +17,4 @@ Via the VSCode extension Posit Publisher, create a deployment for the applicatio
 
 ## Apple shortcuts
 
-Apple shortcut scripts live in `/scripts`. These are deployable via the Juno iOS app to run python scripts.
+Apple shortcut scripts live in `/scripts`. These are deployable via shortcuts and the a-Shell iOS app to run python scripts. Due to the limited runtime environment, only limited packages are supported and all packages need to be pip installed in a-Shell.
