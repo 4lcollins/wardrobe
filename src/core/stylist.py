@@ -143,5 +143,5 @@ class Stylist:
         return {
             "num_clothing_pieces": num_clothing_pieces,
             "clothing_options": clothing_options,
-            "insight": clothing_recommendation.insight
+            "insight": clothing_recommendation.insight if clothing_recommendation else None
         }

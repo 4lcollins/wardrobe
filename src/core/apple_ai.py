@@ -16,7 +16,7 @@ class AppleAI:
     def __init__(self):
         pass
 
-    def generate(self, user_input: str, model_class: Type[T]) -> T:
+    def generate(self, user_input: str, model_class: Type[T]) -> T | None:
         # Extract the JSON Schema
         schema = "{\n" + ", ".join(
 
@@ -42,8 +42,10 @@ class AppleAI:
 
         if sys.platform == "ios":
             text_response = self._run_ios(pedantic_prompt)
-        else:
+        elif sys.platform == "darwin":
             text_response = self._run_subprocess(pedantic_prompt)
+        else:
+            return None
 
         return self._parse_response(text_response, model_class)
 

@@ -37,7 +37,7 @@ def app_server(input, output, session):
                 "Now, let's recommend some clothing pieces for you.",
             ]
         )
-        recommendation = stylist.recommend_clothing(temperature=low_temp)
+        recommendation = stylist.recommend_clothing()
 
         lines.append(spacer_text)
         lines.append("Here are your recommended clothing pieces for this location:")
