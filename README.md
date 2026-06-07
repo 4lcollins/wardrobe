@@ -7,14 +7,14 @@ Wardrobe is a personal clothing management app that helps you organize, track, a
 Run the Shiny app locally from the project root:
 
 ```sh
-shiny run app/main.py
+shiny run shiny_app/app.py
 ```
 
-Shiny application code lives in `app/`, while backend logic and services live in `src/`.
+Shiny application code lives in `shiny_app/`, while backend logic and services live in `src/`.
 
 ### Deploy to Posit Connect Cloud
 Via the VSCode extension Posit Publisher, create a deployment for the application.
 
 ## Apple shortcuts
 
-Apple shortcut scripts live in `/scripts`. These are deployable via the Juno iOS app to run python scripts.
+Apple shortcut scripts live in `/shortcuts`. These are deployable via shortcuts and the a-Shell iOS app to run python scripts. Due to the limited runtime environment, only limited packages are supported and all packages need to be pip installed in a-Shell.
