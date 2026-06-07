@@ -80,7 +80,7 @@ class AppleAI:
                 raise TimeoutError(
                     f"Timed out waiting for Apple AI output: {output_path}"
                 )
-            time.sleep(0.25)
+            time.sleep(1)
 
         text_response = output_path.read_text()
         output_path.unlink(missing_ok=True)
