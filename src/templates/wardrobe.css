@@ -1,0 +1,61 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+    background-color: #f4f4f4;
+    padding: 30px;
+    color: #333333;
+}
+
+.card {
+    max-width: 600px;
+    margin: auto;
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    border: 1px solid #dddddd;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #e5e5e5;
+    margin: 25px 0;
+}
+
+.weather-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.weather-table td {
+    padding: 12px;
+}
+
+.weather-table tr:nth-child(even) {
+    background: #fafafa;
+}
+
+.outfit-box {
+    background: #fafafa;
+    padding: 15px;
+    margin: 20px 0;
+}
+
+.morning {
+    border-left: 4px solid #4a90e2;
+}
+
+.midday {
+    border-left: 4px solid #f5a623;
+}
+
+.insight {
+    background: #f8fbff;
+    border-radius: 8px;
+    padding: 18px;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 30px;
+    color: #888888;
+    font-size: 13px;
+}
