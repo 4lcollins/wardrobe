@@ -1,5 +1,5 @@
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
 from src.settings import SETTINGS
 
@@ -38,11 +38,7 @@ class Thermometer:
             return {"lat": lat, "lon": lon}
         raise ValueError("Location Not Found")
 
-    def get_temperature(self, temp_option: str) -> dict:
-        """
-        Fetch the 'feels like' temperature for a given city using OpenWeatherMap API.
-        Returns the temperature in Fahrenheit.
-        """
+    def _get_forecast(self) -> dict:
         coordinates = self.__get_location_coordinates_api()
 
         params = {
@@ -53,22 +49,26 @@ class Thermometer:
         }
         response = requests.get(self.temperature_api_url, params=params)
         response.raise_for_status()
-        data = response.json()
-        
-        if data.get("cod") == 401:
-            raise ValueError("Unauthorized Access: Invalid API Key")
+        return response.json()
 
-        today = data.get(temp_option)
-
-        return today
-
+    @staticmethod
+    def _hours_remaining_in_target_day(
+        timezone_offset_seconds: int,
+        now_utc: datetime | None = None,
+    ) -> int:
+        now_utc = now_utc or datetime.now(timezone.utc)
+        target_now = now_utc + timedelta(seconds=timezone_offset_seconds)
+        return max(24 - target_now.hour, 1)
+ 
     def get_low_high(self) -> list[float]:
         if self.low_temp and self.high_temp:
             return [self.low_temp, self.high_temp]
-        hourly_temperature = self.get_temperature("hourly")
 
-        # determine hours remaining in the current local day (include current partial hour)
-        hours_remaining = max(24 - datetime.now().hour, 1)
+        forecast = self._get_forecast()
+        hourly_temperature = forecast.get("hourly")
+
+        timezone_offset_seconds = forecast.get("timezone_offset", 0)
+        hours_remaining = self._hours_remaining_in_target_day(timezone_offset_seconds)
         hourly_temperature_today = hourly_temperature[:hours_remaining]
 
         temps_list = [h.get("feels_like") for h in hourly_temperature_today]

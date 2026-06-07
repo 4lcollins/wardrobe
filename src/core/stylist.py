@@ -11,7 +11,7 @@ class ClothingRecommendation:
 
 class Stylist:
     """
-    Wardrobe class provides clothing recommendations based on temperature.
+    Stylist provides clothing recommendations based on temperature.
     """    
     CLOTHING_OPTIONS: dict[int, list[str | list[str]]] = {
             1: [
