@@ -1,6 +1,7 @@
 from src.core.thermometer import Thermometer
 from src.core.stylist import Stylist
 from src.utils.email import send_email
+from src.utils.template import render_template
 
 
 def run(email: str):
@@ -17,21 +18,17 @@ def run(email: str):
     low_temp_outfit = recommendation["clothing_options"][0]
     high_temp_outfit = recommendation["clothing_options"][1]
 
-    message = (
-        f"Good Morning!\n\n"
-        f"Here's today's recommendation for {city}, {state}.\n"
-        "\n**WEATHER**\n"
-        f"Low (feels like): {low_temp}°F\n"
-        f"High (feels like): {high_temp}°F\n"
-        "\n**WARDROBE PLAN**\n"
-        f"We recommend between {recommendation['num_clothing_pieces'][1]} and {recommendation['num_clothing_pieces'][0]} pieces.\n\n"
-        "**Morning / Low Temp Outfit:**\n"
-        + "\n".join(f"  - {item}" for item in low_temp_outfit) + "\n\n"
-        "**Midday / High Temp Outfit:**\n"
-        + "\n".join(f"  - {item}" for item in high_temp_outfit) + "\n\n"
-        "**Stylist Insight:**\n"
-        f"{recommendation['insight']}\n"
-        "\nSincerely,\nYour Wardrobe Assistant"
+    message = render_template(
+        "daily_brief.html",
+        city=city,
+        state=state,
+        low_temp=low_temp,
+        high_temp=high_temp,
+        min_pieces=recommendation["num_clothing_pieces"][1],
+        max_pieces=recommendation["num_clothing_pieces"][0],
+        low_temp_outfit=low_temp_outfit,
+        high_temp_outfit=high_temp_outfit,
+        insight=recommendation["insight"],
     )
 
     send_email(

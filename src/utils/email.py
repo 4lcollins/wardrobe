@@ -9,12 +9,12 @@ def send_email(subject, body, receiver_email):
     password = SETTINGS.icloud_sender_password
 
     # Build email
-    message = MIMEMultipart()
+    message = MIMEMultipart("alternative")
     message["From"] = sender_email
     message["To"] = receiver_email
     message["Subject"] = subject
 
-    message.attach(MIMEText(body, "plain"))
+    message.attach(MIMEText(body, "html"))
 
     # Send email
     with smtplib.SMTP("smtp.mail.me.com", 587) as server:

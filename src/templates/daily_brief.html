@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+{{ css }}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>Daily Wardrobe Brief</h1>
+
+<p>
+Hi! Here's your personalized recommendation for
+<strong>{{ city }}, {{ state }}</strong>.
+</p>
+
+<hr>
+
+<h2>🌤️ Weather</h2>
+
+<table class="weather-table">
+<tr>
+    <td><strong>Morning Low</strong></td>
+    <td align="right">{{ low_temp }}°F</td>
+</tr>
+<tr>
+    <td><strong>Afternoon High</strong></td>
+    <td align="right">{{ high_temp }}°F</td>
+</tr>
+</table>
+
+<hr>
+
+<h2>👕 Wardrobe Plan</h2>
+
+<p>
+Today's forecast calls for
+<strong>{{ min_pieces }}–{{ max_pieces }} pieces.</strong>
+</p>
+
+<div class="outfit-box morning">
+<h3>🌅 Morning Outfit</h3>
+<ul>
+{% for item in low_temp_outfit %}
+<li>{{ item }}</li>
+{% endfor %}
+</ul>
+</div>
+
+<div class="outfit-box midday">
+<h3>☀️ Midday Outfit</h3>
+<ul>
+{% for item in high_temp_outfit %}
+<li>{{ item }}</li>
+{% endfor %}
+</ul>
+</div>
+
+<div class="insight">
+<h3>💡 Stylist Insight</h3>
+<p><em>{{ insight }}</em></p>
+</div>
+
+<div class="footer">
+Have a fantastic day!<br>
+<strong>Your Wardrobe Assistant</strong>
+</div>
+
+</div>
+
+</body>
+</html>

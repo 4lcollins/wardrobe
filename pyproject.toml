@@ -9,6 +9,7 @@ dependencies = [
   "requests",
   "python-dotenv",
   "shiny",
+  "jinja2"
 ]
 
 [project.optional-dependencies]
