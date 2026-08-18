@@ -19,7 +19,7 @@ class TimeOfDayPeriod:
 DEFAULT_TIME_OF_DAY_PERIODS = [
     TimeOfDayPeriod("Morning", 7, 12),
     TimeOfDayPeriod("Afternoon", 12, 17),
-    TimeOfDayPeriod("Evening", 17, 22),
+    TimeOfDayPeriod("Evening", 17, 24),
 ]
 
 class Calendar:
