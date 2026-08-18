@@ -37,7 +37,7 @@ class Settings:
     def __init__(self, config):
         self.app_env = APP_ENV
         self.sender_email = os.getenv("SENDER_EMAIL", config.get("sender_email", ""))
-        self.icloud_sender_password = os.getenv("ICLOUD_SENDER_PASSWORD", "")
+        self.gmail_app_password = os.getenv("GMAIL_APP_PASSWORD", "")
         self.openweathermap_key = os.getenv("OPENWEATHERMAP_KEY", "")
 
 SETTINGS = Settings(load_config())
