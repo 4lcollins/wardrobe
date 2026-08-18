@@ -1,6 +1,7 @@
 import requests
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 
+from src.core.calendar import Calendar
 from src.settings import SETTINGS
 
 class Thermometer:
@@ -13,9 +14,6 @@ class Thermometer:
         self.city = city
         self.state_abbr = state_abbr
         self.verbose = verbose
-
-        self.low_temp = None
-        self.high_temp = None
 
     def __get_location_coordinates_api(self) -> dict[str, float]:
         """
@@ -52,28 +50,34 @@ class Thermometer:
         return response.json()
 
     @staticmethod
-    def _hours_remaining_in_target_day(
-        timezone_offset_seconds: int,
-        now_utc: datetime | None = None,
-    ) -> int:
-        now_utc = now_utc or datetime.now(timezone.utc)
-        target_now = now_utc + timedelta(seconds=timezone_offset_seconds)
-        return max(24 - target_now.hour, 1)
- 
-    def get_low_high(self) -> list[float]:
-        if self.low_temp and self.high_temp:
-            return [self.low_temp, self.high_temp]
+    def _target_datetime(timestamp: int, timezone_offset_seconds: int) -> datetime:
+        return datetime.fromtimestamp(
+            timestamp + timezone_offset_seconds,
+            timezone.utc,
+        )
+
+    def get_period_temperatures(self, calendar: Calendar | None = None) -> list[dict]:
+        calendar = calendar or Calendar()
 
         forecast = self._get_forecast()
-        hourly_temperature = forecast.get("hourly")
-
+        hourly_temperature = forecast.get("hourly", [])
         timezone_offset_seconds = forecast.get("timezone_offset", 0)
-        hours_remaining = self._hours_remaining_in_target_day(timezone_offset_seconds)
-        hourly_temperature_today = hourly_temperature[:hours_remaining]
 
-        temps_list = [h.get("feels_like") for h in hourly_temperature_today]
+        period_temperatures = []
+        for period in calendar.active_time_of_day_periods:
+            temps = [
+                h.get("feels_like")
+                for h in hourly_temperature
+                if period.contains(
+                    self._target_datetime(h.get("dt"), timezone_offset_seconds).hour
+                )
+            ]
+            if temps:
+                period_temperatures.append(
+                    {
+                        "period": period,
+                        "temperature": round(sum(temps) / len(temps), 1),
+                    }
+                )
 
-        self.low_temp = min(temps_list)
-        self.high_temp = max(temps_list)
-
-        return [self.low_temp, self.high_temp]
+        return period_temperatures

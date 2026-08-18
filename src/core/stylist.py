@@ -3,6 +3,7 @@ import math
 from dataclasses import dataclass
 
 from src.core.apple_ai import apple_ai
+from src.core.calendar import Calendar
 from src.core.thermometer import Thermometer
 
 @dataclass
@@ -60,79 +61,80 @@ class Stylist:
         nums = []
         for temp in temperatures:
             num_clothing_pieces_raw = math.ceil(11 - temp / 10)
-
-            # Keep recommendations within the configured clothing options.
             num_clothing_pieces_adjusted = min(max(num_clothing_pieces_raw, 1), max(self.CLOTHING_OPTIONS))
-
             nums.append(num_clothing_pieces_adjusted)
-
         return nums
+
+    def _get_clothing_option(self, num_clothing_pieces: int) -> list[str]:
+        """
+        Returns a random clothing option for a given number of pieces.
+        """
+        options = self.CLOTHING_OPTIONS.get(num_clothing_pieces, [])
+        if options and isinstance(options[0], list):
+            return random.choice(options)
+        return options
 
     def _get_clothing_options(self, num_clothing_pieces: list[int]) -> list[list[str]]:
         """
-        Ensures the warmer outfit is a subset of the colder outfit 
-        to avoid mid-day wardrobe changes.
+        Returns clothing options for each period, ensuring warmer periods
+        are subsets of the coldest period's outfit to avoid mid-day wardrobe changes.
         """
-        # Sort so we process the coldest (most pieces) first
-        # We assume index 0 is low and index 1 is high, but we sort to be safe
-        low_idx = 0 if num_clothing_pieces[0] >= num_clothing_pieces[1] else 1
-        high_idx = 1 - low_idx
-        
-        num_cold = num_clothing_pieces[low_idx]
-        num_warm = num_clothing_pieces[high_idx]
+        max_pieces = max(num_clothing_pieces)
+        master_outfit = self._get_clothing_option(max_pieces)
 
-        # 1. Pick the "Master" (Colder) Outfit
-        master_options = self.CLOTHING_OPTIONS.get(num_cold, [])
-        if master_options and isinstance(master_options[0], list):
-            master_outfit = random.choice(master_options)
-        else:
-            master_outfit = master_options
+        result = []
+        for num_pieces in num_clothing_pieces:
+            if num_pieces == max_pieces:
+                result.append(master_outfit)
+                continue
 
-        # 2. Find a subset for the warmer temperature
-        warm_possibilities = self.CLOTHING_OPTIONS.get(num_warm, [])
-        
-        # If the warm temperature has multiple choices, pick the one that matches the master
-        if warm_possibilities and isinstance(warm_possibilities[0], list):
-            # Logic: Filter possibilities to find one where all items exist in master_outfit
-            valid_subsets = [
-                p for p in warm_possibilities 
-                if all(item in master_outfit for item in p)
-            ]
-            # Fallback: If no perfect subset exists, just pick the first warm possibility
-            warm_outfit = random.choice(valid_subsets) if valid_subsets else warm_possibilities[0]
-        else:
-            warm_outfit = warm_possibilities
+            possibilities = self.CLOTHING_OPTIONS.get(num_pieces, [])
+            if possibilities and isinstance(possibilities[0], list):
+                valid_subsets = [
+                    p for p in possibilities
+                    if all(item in master_outfit for item in p)
+                ]
+                outfit = random.choice(valid_subsets) if valid_subsets else possibilities[0]
+            else:
+                outfit = possibilities
 
-        # Re-assemble in original [low, high] order
-        result = [None, None]
-        result[low_idx] = master_outfit
-        result[high_idx] = warm_outfit
+            result.append(outfit)
+
         return result
 
-    def recommend_clothing(self) -> dict:
+    def recommend_clothing(self, calendar: Calendar | None = None) -> dict:
         """
-        Recommends clothing items based on the daily high temperature.
-
-        Args:
-            temperature (float): The temperature to recommend clothing for.
-
-        Returns:
-            dict: 
-                "num_clothing_pieces": Calculated number of clothing pieces to wear
-                "clothing_options": Stylized clothing options based on temperature
+        Recommends clothing items for each configured time-of-day period.
         """
-        temperatures = self.thermometer.get_low_high()
+        period_temperatures = self.thermometer.get_period_temperatures(calendar)
+        temperatures = [
+            period_temperature["temperature"]
+            for period_temperature in period_temperatures
+        ]
         num_clothing_pieces = self._get_num_clothing_pieces(temperatures)
         clothing_options = self._get_clothing_options(num_clothing_pieces)
 
+        time_periods = [
+            {
+                "name": period_temperature["period"].name,
+                "temperature": period_temperature["temperature"],
+                "num_clothing_pieces": num_pieces,
+                "clothing_options": clothing_option,
+            }
+            for period_temperature, num_pieces, clothing_option
+            in zip(period_temperatures, num_clothing_pieces, clothing_options)
+        ]
+
         user_input = (
             f"CONTEXT:\n"
-            f"Low/High Temps: {temperatures}°F\n"
-            f"Morning Outfit: {clothing_options[0]}\n"
-            f"Afternoon Outfit: {clothing_options[1]}\n\n"
+            f"Time of Day Periods: {time_periods}\n\n"
             f"TASK:\n"
-            f"You are a stylist. In a few sentence or two, explain how the user can easily transition from the morning to the afternoon "
-            f"just by removing layers. Focus on the convenience of the outfit choice."
+            f"You are a stylist. In a few sentences, explain how the user can dress for each part of the day.\n\n"
+            f"All of the clothing options come from the same msater outfit. So, don't suggest switching actual items for other items of different materials, for example. "
+            f"Focus on simple transitions between periods. Don't build or even mention transitions for periods that do not change items. f"
+            f"For example, don't suggest to switch to the same outfit between periods.\n\n"
+            f"Only make suggestions from the clothing options given to you. Do not fabricate additional items."
+
         )
 
         clothing_recommendation = apple_ai.generate(
@@ -141,6 +143,8 @@ class Stylist:
         )
 
         return {
+            "time_periods": time_periods,
+            "temperatures": temperatures,
             "num_clothing_pieces": num_clothing_pieces,
             "clothing_options": clothing_options,
             "insight": clothing_recommendation.insight if clothing_recommendation else None
