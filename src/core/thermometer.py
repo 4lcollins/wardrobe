@@ -9,7 +9,9 @@ class Thermometer:
         self.api_key = SETTINGS.openweathermap_key
         if not self.api_key:
             raise ValueError("API Key not found. Please set it using os.environ['OPENWEATHERMAP_KEY'] = 'YOUR_API_KEY'")
-        self.temperature_api_url = "https://api.openweathermap.org/data/3.0/onecall"
+        
+        # Base URL for One Call 4.0
+        self.temperature_api_url = "https://api.openweathermap.org/data/4.0/onecall"
         self.geocode_api_url = "https://api.openweathermap.org/geo/1.0/direct"
         self.city = city
         self.state_abbr = state_abbr
@@ -45,7 +47,8 @@ class Thermometer:
             "lon": coordinates["lon"],
             "units": "imperial"
         }
-        response = requests.get(self.temperature_api_url, params=params)
+        endpoint_url = f"{self.temperature_api_url}/timeline/1h"
+        response = requests.get(endpoint_url, params=params)
         response.raise_for_status()
         return response.json()
 
@@ -60,7 +63,7 @@ class Thermometer:
         calendar = calendar or Calendar()
 
         forecast = self._get_forecast()
-        hourly_temperature = forecast.get("hourly", [])
+        hourly_temperature = forecast.get("data", [])
         timezone_offset_seconds = forecast.get("timezone_offset", 0)
 
         period_temperatures = []
