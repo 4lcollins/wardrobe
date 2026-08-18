@@ -1,47 +1,52 @@
 from datetime import datetime, timezone
 
+from src.core.calendar import Calendar
 from src.core.thermometer import Thermometer
 
 
-class TestHoursRemainingInTargetDay:
-    def test_uses_negative_timezone_offset(self):
-        now_utc = datetime(2026, 6, 7, 12, 30, tzinfo=timezone.utc)
+class TestTargetDatetime:
+    def test_uses_target_timezone_offset(self):
+        timestamp = int(datetime(2026, 6, 7, 12, tzinfo=timezone.utc).timestamp())
 
-        assert Thermometer._hours_remaining_in_target_day(-6 * 60 * 60, now_utc) == 18
+        target_datetime = Thermometer._target_datetime(timestamp, -6 * 60 * 60)
 
-    def test_uses_positive_timezone_offset(self):
-        now_utc = datetime(2026, 6, 7, 12, 30, tzinfo=timezone.utc)
-
-        assert Thermometer._hours_remaining_in_target_day(2 * 60 * 60, now_utc) == 10
+        assert target_datetime.hour == 6
 
 
-class TestGetLowHigh:
-    def test_uses_target_day_slice(self, monkeypatch):
-        monkeypatch.setattr(Thermometer, "_hours_remaining_in_target_day", staticmethod(lambda offset: 3))
+class TestGetPeriodTemperatures:
+    def test_groups_temperatures_by_day_period(self, monkeypatch):
         monkeypatch.setattr("src.core.thermometer.SETTINGS.openweathermap_key", "test-key")
 
         thermometer = Thermometer(city="Provo", state_abbr="UT", verbose=False)
+        timestamps = [
+            int(datetime(2026, 6, 7, hour, tzinfo=timezone.utc).timestamp())
+            for hour in [12, 13, 18, 23]
+        ]
         monkeypatch.setattr(
             thermometer,
             "_get_forecast",
             lambda: {
                 "timezone_offset": -6 * 60 * 60,
                 "hourly": [
-                    {"feels_like": 40},
-                    {"feels_like": 55},
-                    {"feels_like": 50},
-                    {"feels_like": 20},
+                    {"dt": timestamps[0], "feels_like": 40},
+                    {"dt": timestamps[1], "feels_like": 50},
+                    {"dt": timestamps[2], "feels_like": 70},
+                    {"dt": timestamps[3], "feels_like": 60},
                 ],
             },
         )
+        calendar = Calendar()
 
-        assert thermometer.get_low_high() == [40, 55]
+        period_temperatures = thermometer.get_period_temperatures(calendar)
 
-    def test_reuses_cached_result(self, monkeypatch):
-        monkeypatch.setattr("src.core.thermometer.SETTINGS.openweathermap_key", "test-key")
-
-        thermometer = Thermometer(city="Provo", state_abbr="UT", verbose=False)
-        thermometer.low_temp = 0
-        thermometer.high_temp = 10
-
-        assert thermometer.get_low_high() == [0, 10]
+        assert [
+            {
+                "period": item["period"].name,
+                "temperature": item["temperature"],
+            }
+            for item in period_temperatures
+        ] == [
+            {"period": "Morning", "temperature": 45},
+            {"period": "Afternoon", "temperature": 70},
+            {"period": "Evening", "temperature": 60},
+        ]

@@ -29,3 +29,8 @@ include = ["src*", "shiny_app*", "shortcuts*"]
 addopts = "--import-mode=importlib"
 pythonpath = ["."]
 testpaths = ["tests"]
+
+[tool.pyright]
+pythonPath = "."
+pythonVersion = "3.11"
+extraPaths = ["."]

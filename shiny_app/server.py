@@ -1,5 +1,6 @@
 from shiny import reactive, render
 
+from src.core.calendar import Calendar
 from src.core.stylist import Stylist
 from src.core.thermometer import Thermometer
 
@@ -23,25 +24,30 @@ def app_server(input, output, session):
         ]
 
         try:
+            calendar = Calendar()
             thermometer = Thermometer(city=input.city(), state_abbr=input.state_abb(), verbose=True)
-            low_temp, high_temp = thermometer.get_low_high()
+            stylist = Stylist(thermometer = thermometer)
+            recommendation = stylist.recommend_clothing(calendar)
         except Exception as e:
             lines.append(f"Error fetching temperature from API: {e}")
             return "\n".join(lines)
 
-        stylist = Stylist(thermometer = thermometer)
         lines.extend(
             [
                 spacer_text,
-                f"Awesome! Today's feels-like range is {low_temp}°F to {high_temp}°F.",
+                "Awesome! Today's feels-like temperatures by time of day are:",
+                *[
+                    f"- {period['name']}: {period['temperature']}°F"
+                    for period in recommendation["time_periods"]
+                ],
                 "Now, let's recommend some clothing pieces for you.",
             ]
         )
-        recommendation = stylist.recommend_clothing()
 
         lines.append(spacer_text)
         lines.append("Here are your recommended clothing pieces for this location:")
-        for item in recommendation["clothing_options"]:
-            lines.append(f"- {item}")
+        for period in recommendation["time_periods"]:
+            outfit = ", ".join(period["clothing_options"])
+            lines.append(f"- {period['name']} ({period['temperature']}°F): {outfit}")
 
         return "\n".join(lines)
