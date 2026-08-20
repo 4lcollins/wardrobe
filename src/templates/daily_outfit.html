@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="color-scheme" content="light dark">
+    <meta name="supported-color-schemes" content="light dark">
+    {% if css %}
+    <style>{{ css | safe }}</style>
+    {% endif %}
+</head>
+
+<body class="email-body">
+<div class="email-container">
+
+    <div class="email-header">✨ Your Daily Style Guide</div>
+    <div class="email-sub">
+        Styled for <strong>{{ city }}, {{ state }}</strong>
+    </div>
+
+    <hr class="email-divider">
+
+    <div class="section-title">🌤️ Weather Forecast</div>
+    <table class="weather-table">
+        <tbody>
+        {% for period in time_periods %}
+        <tr>
+            <td><strong>{{ period.name }}</strong></td>
+            <td align="right"><strong>{{ period.temperature }}°F</strong></td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <hr class="email-divider">
+
+    <div class="section-title">👕 Today's Outfits</div>
+    {% for period in time_periods %}
+    <div class="outfit-box {% if loop.index == 1 %}morning{% else %}midday{% endif %}">
+        <div class="outfit-title">{{ period.name }} Outfit</div>
+        <div class="outfit-pieces">
+            {{ period.num_clothing_pieces }} pieces
+        </div>
+        <ul class="outfit-list">
+            {% for item in period.clothing_options %}
+            <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endfor %}
+
+    {% if insight and insight|string|trim %}
+    <div class="insight">
+        <div class="insight-title">💡 Stylist Tip</div>
+        <p>{{ insight }}</p>
+    </div>
+    {% endif %}
+
+    <div class="footer">
+        Have a wonderfully styled day!<br>
+        <strong>Wardrobe Stylist</strong>
+    </div>
+
+</div>
+</body>
+</html>

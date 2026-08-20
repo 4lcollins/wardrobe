@@ -1,6 +1,9 @@
-from src.core.calendar import Calendar
-from src.core.thermometer import Thermometer
-from src.core.stylist import Stylist
+from src.core import (
+    Calendar,
+    Location,
+    Stylist,
+    Thermometer,
+    )
 from src.settings import SETTINGS
 from src.utils.email import send_email
 from src.utils.template import render_template
@@ -8,7 +11,8 @@ from src.utils.template import render_template
 
 def run():
     calendar = Calendar()
-    thermometer = Thermometer(verbose=True, city="Provo", state_abbr="UT")
+    location = Location(city="Provo", state_abbr="UT")
+    thermometer = Thermometer(verbose=True, location=location)
     stylist = Stylist(thermometer=thermometer)
 
     city = "Provo"
@@ -17,7 +21,8 @@ def run():
     recommendation = stylist.recommend_clothing(calendar)
 
     message = render_template(
-        "daily_brief.html",
+        "src/templates/daily_outfit.html",
+        use_email_css=True,
         city=city,
         state=state,
         time_periods=recommendation["time_periods"],
@@ -25,7 +30,7 @@ def run():
     )
 
     send_email(
-        subject="Daily Wardrobe Brief",
+        subject="Your Daily Outfit",
         body=message,
         bcc_emails=SETTINGS.recipient_emails,
     )
