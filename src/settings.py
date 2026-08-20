@@ -39,5 +39,6 @@ class Settings:
         self.sender_email = os.getenv("SENDER_EMAIL", config.get("sender_email", ""))
         self.gmail_app_password = os.getenv("GMAIL_APP_PASSWORD", "")
         self.openweathermap_key = os.getenv("OPENWEATHERMAP_KEY", "")
+        self.gemini_api_key = os.getenv("GEMINI_API_KEY", "")
 
 SETTINGS = Settings(load_config())

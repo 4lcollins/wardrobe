@@ -1,13 +1,13 @@
 import random
 import math
+from pydantic import BaseModel
 from dataclasses import dataclass
 
-from src.core.apple_ai import apple_ai
 from src.core.calendar import Calendar
 from src.core.thermometer import Thermometer
+from src.core.llm import Prompt
 
-@dataclass
-class ClothingRecommendation:
+class ClothingRecommendation(BaseModel):
     insight: str
 
 class Stylist:
@@ -125,27 +125,26 @@ class Stylist:
             in zip(period_temperatures, num_clothing_pieces, clothing_options)
         ]
 
-        user_input = (
+        prompt_content = (
             f"CONTEXT:\n"
             f"Time of Day Periods: {time_periods}\n\n"
             f"TASK:\n"
             f"You are a stylist. In a few sentences, explain how the user can dress for each part of the day.\n\n"
-            f"All of the clothing options come from the same msater outfit. So, don't suggest switching actual items for other items of different materials, for example. "
-            f"Focus on simple transitions between periods. Don't build or even mention transitions for periods that do not change items. f"
+            f"All of the clothing options come from the same master outfit. So, don't suggest switching actual items for other items of different materials, for example. "
+            f"Focus on simple transitions between periods. Don't build or even mention transitions for periods that do not change items. "
             f"For example, don't suggest to switch to the same outfit between periods.\n\n"
             f"Only make suggestions from the clothing options given to you. Do not fabricate additional items."
-
         )
-
-        clothing_recommendation = apple_ai.generate(
-            user_input=user_input,
-            model_class=ClothingRecommendation
-        )
+        clothing_recommendation = Prompt(
+            model="gemini-3.5-flash",
+            content=prompt_content,
+            response_schema=ClothingRecommendation
+        ).generate()
 
         return {
             "time_periods": time_periods,
             "temperatures": temperatures,
             "num_clothing_pieces": num_clothing_pieces,
             "clothing_options": clothing_options,
-            "insight": clothing_recommendation.insight if clothing_recommendation else None
+            "insight": clothing_recommendation.insight
         }
