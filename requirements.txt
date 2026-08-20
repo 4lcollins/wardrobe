@@ -121,6 +121,8 @@ python-multipart==0.0.32 ; sys_platform != 'emscripten'
     # via shiny
 pytz==2026.3.post1 ; python_full_version < '3.11'
     # via pandas
+pyyaml==6.0.3
+    # via wardrobe
 questionary==2.1.1 ; sys_platform != 'emscripten'
     # via shiny
 requests==2.34.2
