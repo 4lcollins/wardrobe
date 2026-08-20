@@ -22,10 +22,16 @@ make requirements
 
 Use the Posit Publisher VS Code extension to create or update the Shiny deployment.
 
-To copy the project to iCloud Drive for Apple Shortcuts/a-Shell workflows:
+## Automations
 
-```sh
-make deploy
-```
+Daily briefs run from GitHub Actions in `.github/workflows/daily-brief.yml`. The workflow can be queued manually from GitHub or by its schedule.
 
-Shortcut runner code lives in `shortcuts/`. Keep that environment lightweight; a-Shell supports only a limited Python package set.
+Configure these repository secrets before running it:
+
+- `GEMINI_API_KEY`
+- `GMAIL_APP_PASSWORD`
+- `OPENWEATHERMAP_KEY`
+- `RECIPIENT_EMAILS`
+- `SENDER_EMAIL`
+
+Put recipient addresses in `RECIPIENT_EMAILS` as a comma- or newline-separated list. Keep it as a secret so the list is editable in GitHub but not visible in the repo or workflow logs.

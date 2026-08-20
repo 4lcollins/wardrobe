@@ -9,6 +9,16 @@ load_dotenv(PROJECT_DIR / ".env")
 
 APP_ENV = os.getenv("APP_ENV", "dev")
 
+
+def parse_email_list(value: str) -> list[str]:
+    return [
+        email.strip()
+        for chunk in value.splitlines()
+        for email in chunk.split(",")
+        if email.strip()
+    ]
+
+
 def load_simple_yaml(yaml_path: Path):
     values = {}
 
@@ -40,5 +50,6 @@ class Settings:
         self.gmail_app_password = os.getenv("GMAIL_APP_PASSWORD", "")
         self.openweathermap_key = os.getenv("OPENWEATHERMAP_KEY", "")
         self.gemini_api_key = os.getenv("GEMINI_API_KEY", "")
+        self.recipient_emails = parse_email_list(os.getenv("RECIPIENT_EMAILS", ""))
 
 SETTINGS = Settings(load_config())
