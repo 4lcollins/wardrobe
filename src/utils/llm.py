@@ -1,7 +1,9 @@
 from typing import Literal
-from pydantic import BaseModel
+
 from google import genai
 from google.genai import types
+from pydantic import BaseModel
+
 from src.settings import SETTINGS
 
 
