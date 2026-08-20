@@ -1,11 +1,12 @@
 from src.core.calendar import Calendar
 from src.core.thermometer import Thermometer
 from src.core.stylist import Stylist
+from src.settings import SETTINGS
 from src.utils.email import send_email
 from src.utils.template import render_template
 
 
-def run(email: str):
+def run():
     calendar = Calendar()
     thermometer = Thermometer(verbose=True, city="Provo", state_abbr="UT")
     stylist = Stylist(thermometer=thermometer)
@@ -26,5 +27,5 @@ def run(email: str):
     send_email(
         subject="Daily Wardrobe Brief",
         body=message,
-        receiver_email=email
+        bcc_emails=SETTINGS.recipient_emails,
     )

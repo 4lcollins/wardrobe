@@ -1,0 +1,31 @@
+name: Daily Wardrobe Brief
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 13 * * *"
+
+jobs:
+  daily-brief:
+    runs-on: ubuntu-latest
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+      OPENWEATHERMAP_KEY: ${{ secrets.OPENWEATHERMAP_KEY }}
+      RECIPIENT_EMAILS: ${{ secrets.RECIPIENT_EMAILS }}
+      SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Install dependencies
+        run: uv sync --no-dev
+
+      - name: Send daily brief
+        run: uv run python -m src.automations.runner daily_brief

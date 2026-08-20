@@ -1,6 +1,4 @@
-.PHONY: deploy requirements run
-
-ICLOUD_PATH := $(HOME)/Library/Mobile Documents/com~apple~CloudDocs/Wardrobe
+.PHONY: automation requirements run
 
 requirements:
 	uv lock --upgrade
@@ -17,12 +15,5 @@ run:
 		shiny run shiny_app/app.py; \
 	fi
 
-deploy:
-	mkdir -p "$(ICLOUD_PATH)"
-	rsync -av \
-		--include='.env' \
-		--exclude='.*' \
-		--filter=':- .gitignore' \
-		--delete \
-		./ "$(ICLOUD_PATH)/"
-	@echo "Deployed to $(ICLOUD_PATH)"
+automation:
+	python -m src.automations.runner daily_brief
