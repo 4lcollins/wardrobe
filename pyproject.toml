@@ -9,7 +9,9 @@ dependencies = [
   "requests",
   "python-dotenv",
   "shiny",
-  "jinja2"
+  "jinja2",
+  "pydantic",
+  "google-genai"
 ]
 
 [project.optional-dependencies]
@@ -34,3 +36,8 @@ testpaths = ["tests"]
 pythonPath = "."
 pythonVersion = "3.11"
 extraPaths = ["."]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2",
+]

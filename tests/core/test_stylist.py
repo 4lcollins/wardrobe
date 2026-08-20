@@ -14,7 +14,7 @@ class TestRecommendClothing:
                 ]
 
         monkeypatch.setattr(
-            "src.core.stylist.apple_ai.generate",
+            "src.core.stylist.Prompt.generate",
             lambda user_input, model_class: model_class(insight="Layer up, then simplify."),
         )
         monkeypatch.setattr("src.core.stylist.random.choice", lambda options: options[0])
