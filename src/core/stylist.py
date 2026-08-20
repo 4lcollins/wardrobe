@@ -135,16 +135,21 @@ class Stylist:
             f"For example, don't suggest to switch to the same outfit between periods.\n\n"
             f"Only make suggestions from the clothing options given to you. Do not fabricate additional items."
         )
-        clothing_recommendation = Prompt(
-            model="gemini-3.5-flash",
-            content=prompt_content,
-            response_schema=ClothingRecommendation
-        ).generate()
+
+        try:
+            clothing_recommendation = Prompt(
+                model="gemini-3.5-flash",
+                content=prompt_content,
+                response_schema=ClothingRecommendation
+            ).generate()
+            insight = getattr(clothing_recommendation, "insight", None)
+        except Exception:
+            insight = None
 
         return {
             "time_periods": time_periods,
             "temperatures": temperatures,
             "num_clothing_pieces": num_clothing_pieces,
             "clothing_options": clothing_options,
-            "insight": clothing_recommendation.insight
+            "insight": insight
         }

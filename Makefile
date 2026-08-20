@@ -9,10 +9,10 @@ run:
 	@if [ -d ".venv" ]; then \
 		. .venv/bin/activate; \
 		export PYTHONPATH=.; \
-		shiny run shiny_app/app.py; \
+		shiny run app.py; \
 	else \
 		export PYTHONPATH=.; \
-		shiny run shiny_app/app.py; \
+		shiny run app.py; \
 	fi
 
 automation:

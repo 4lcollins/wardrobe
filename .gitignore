@@ -8,7 +8,6 @@ __pycache__/
 # Virtual environments
 .venv/
 .env
-src/config/shinyapps.env
 
 # IDE / editor
 .vscode/

@@ -10,7 +10,7 @@ Run the Shiny app locally from the project root:
 make run
 ```
 
-Shiny application code lives in `shiny_app/`, while backend logic and services live in `src/`.
+Shiny application code lives in `web/`, while backend logic and services live in `src/`.
 
 ## Deployment
 
