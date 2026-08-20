@@ -1,0 +1,1237 @@
+/* =========================================================
+   WARDROBE THEME
+   Shared across Shiny + Email
+   ========================================================= */
+
+
+/* =========================================================
+   1. LIGHT THEME + DESIGN TOKENS
+   ========================================================= */
+
+:root,
+[data-bs-theme="light"] {
+    /* Colors */
+    --color-bg: #fbf7ee;
+    --color-surface: #ffffff;
+    --color-surface-alt: #f5ecd8;
+
+    --color-text: #4a3e35;
+    --color-text-strong: #3b2f27;
+    --color-text-muted: #8c7a6b;
+    --color-text-faint: #a89985;
+
+    --color-border: #e5d4bc;
+    --color-border-strong: #d9c5ab;
+
+    --color-primary: #b56c46;
+    --color-primary-hover: #a45f3b;
+    --color-primary-dark: #945332;
+    --color-primary-shadow: #784227;
+
+    --color-secondary: #849b82;
+    --color-secondary-hover: #758b73;
+    --color-secondary-dark: #697e67;
+    --color-secondary-shadow: #4f5f4e;
+
+    --color-accent: #9c6b43;
+
+    --color-morning: #849b82;
+    --color-midday: #d49a6a;
+
+    --color-banner: #3b2f27;
+    --color-banner-border: #5c4a3d;
+    --color-banner-text: #fbf7ee;
+
+    /* Typography */
+    --font-body:
+        "Inter",
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        sans-serif;
+
+    --font-heading:
+        "Playfair Display",
+        Georgia,
+        serif;
+
+    /* Shape */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 14px;
+    --radius-xl: 20px;
+    --radius-pill: 50rem;
+
+    /* Shadows */
+    --shadow-card: 0 6px 18px rgba(74, 62, 53, 0.06);
+    --shadow-banner: 0 5px 16px rgba(40, 30, 25, 0.15);
+
+    /* Bootstrap mapping */
+    --bs-body-bg: var(--color-bg);
+    --bs-body-color: var(--color-text);
+
+    --bs-secondary-bg: var(--color-surface-alt);
+    --bs-tertiary-bg: var(--color-surface-alt);
+
+    --bs-emphasis-color: var(--color-text-strong);
+    --bs-heading-color: var(--color-text-strong);
+
+    --bs-border-color: var(--color-border);
+
+    --bs-card-bg: var(--color-surface);
+    --bs-card-color: var(--color-text);
+
+    --bs-primary: var(--color-primary);
+    --bs-primary-rgb: 181, 108, 70;
+
+    --bs-secondary: var(--color-secondary);
+    --bs-secondary-rgb: 132, 155, 130;
+
+    --bs-link-color: var(--color-primary);
+    --bs-link-hover-color: var(--color-primary-hover);
+}
+
+
+/* =========================================================
+   2. DARK THEME
+   Controlled by Shiny / Bootstrap
+   ========================================================= */
+
+[data-bs-theme="dark"] {
+    --color-bg: #463a32;
+    --color-surface: #342d29;
+    --color-surface-alt: #51443a;
+
+    --color-text: #e7ddd4;
+    --color-text-strong: #f4ece5;
+    --color-text-muted: #c0ada0;
+    --color-text-faint: #a89588;
+
+    --color-border: #796556;
+    --color-border-strong: #8b7563;
+
+    --color-primary: #c17b58;
+    --color-primary-hover: #cf8862;
+    --color-primary-dark: #a86646;
+    --color-primary-shadow: #805139;
+
+    --color-secondary: #8fa58a;
+    --color-secondary-hover: #9db397;
+    --color-secondary-dark: #71836d;
+    --color-secondary-shadow: #56614f;
+
+    --color-accent: #d0a078;
+
+    --color-morning: #8fa58a;
+    --color-midday: #d49a6a;
+
+    --color-banner: #342d29;
+    --color-banner-border: #6f5b4d;
+    --color-banner-text: #f4ece5;
+
+    --bs-primary-rgb: 193, 123, 88;
+    --bs-secondary-rgb: 143, 165, 138;
+}
+
+
+/* =========================================================
+   3. GLOBAL UI
+   ========================================================= */
+
+html,
+body {
+    min-height: 100%;
+}
+
+body {
+    background-color: #fbf7ee;
+    background-color: var(--color-bg) !important;
+
+    color: #4a3e35;
+    color: var(--color-text) !important;
+
+    font-family:
+        "Inter",
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        sans-serif;
+    font-family: var(--font-body);
+
+    margin: 0;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #3b2f27;
+    color: var(--color-text-strong);
+}
+
+a {
+    color: #b56c46;
+    color: var(--color-primary);
+}
+
+a:hover {
+    color: #a45f3b;
+    color: var(--color-primary-hover);
+}
+
+.app-shell {
+    width: min(1100px, 100%);
+    margin: 0 auto;
+    padding: 32px 18px 48px;
+}
+
+
+/* =========================================================
+   4. TYPOGRAPHY
+   ========================================================= */
+
+.hero-header {
+    color: #fbf7ee !important;
+    color: var(--color-banner-text) !important;
+
+    font-family:
+        "Playfair Display",
+        Georgia,
+        serif;
+    font-family: var(--font-heading);
+
+    font-size: clamp(2.1rem, 5vw, 2.8rem);
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    line-height: 1.05;
+    margin: 0;
+}
+
+.hero-kicker {
+    color: #9c6b43 !important;
+    color: var(--color-accent) !important;
+
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+
+    margin: 8px 0 0;
+}
+
+.sub-header {
+    color: #fbf7ee !important;
+    color: var(--color-banner-text) !important;
+
+    font-size: 1rem;
+    line-height: 1.5;
+    opacity: 0.78;
+
+    margin: 16px 0 0;
+    max-width: 700px;
+}
+
+.section-title {
+    color: #9c6b43;
+    color: var(--color-accent);
+
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+
+    margin: 0 0 12px;
+}
+
+
+/* =========================================================
+   5. HERO / HEADER PANEL
+   ========================================================= */
+
+.hero-panel {
+    background-color: #3b2f27;
+    background-color: var(--color-banner);
+
+    color: #fbf7ee;
+    color: var(--color-banner-text);
+
+    border: 3px solid #5c4a3d;
+    border-color: var(--color-banner-border);
+
+    border-radius: 20px;
+    border-radius: var(--radius-xl);
+
+    padding: 24px 26px 22px;
+    margin-bottom: 40px;
+
+    box-shadow: 0 5px 16px rgba(40, 30, 25, 0.15);
+    box-shadow: var(--shadow-banner);
+}
+
+.hero-panel h1,
+.hero-panel h2,
+.hero-panel h3,
+.hero-panel h4,
+.hero-panel h5,
+.hero-panel h6 {
+    color: #fbf7ee !important;
+    color: var(--color-banner-text) !important;
+}
+
+.hero-panel .sub-header {
+    color: #fbf7ee !important;
+    color: var(--color-banner-text) !important;
+}
+
+.hero-top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+    width: 100%;
+}
+
+
+/* =========================================================
+   6. THEME TOGGLE
+   ========================================================= */
+
+.theme-control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    padding: 5px;
+
+    background-color: #f5ecd8;
+    background-color: var(--color-surface-alt);
+
+    border: 2px solid #5c4a3d;
+    border-color: var(--color-banner-border);
+
+    border-radius: 12px;
+    border-radius: var(--radius-md);
+
+    box-shadow: 0 3px 0 #5c4a3d;
+    box-shadow: 0 3px 0 var(--color-banner-border);
+}
+
+.theme-control .btn,
+.theme-control button {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+
+    width: 42px;
+    height: 36px;
+    min-width: 42px;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    background-color: #ffffff !important;
+    background-color: var(--color-surface) !important;
+
+    color: #3b2f27 !important;
+    color: var(--color-text-strong) !important;
+
+    border: 2px solid #e5d4bc !important;
+    border-color: var(--color-border) !important;
+
+    border-radius: 8px !important;
+    border-radius: var(--radius-sm) !important;
+
+    box-shadow: none !important;
+    opacity: 1 !important;
+}
+
+.theme-control .btn:hover,
+.theme-control button:hover {
+    background-color: #f5ecd8 !important;
+    background-color: var(--color-surface-alt) !important;
+
+    color: #3b2f27 !important;
+    color: var(--color-text-strong) !important;
+
+    border-color: #9c6b43 !important;
+    border-color: var(--color-accent) !important;
+
+    transform: none;
+    box-shadow: none !important;
+}
+
+.theme-control .btn:active,
+.theme-control button:active {
+    transform: translateY(1px);
+    box-shadow: none !important;
+}
+
+.theme-control svg,
+.theme-control i {
+    color: #3b2f27 !important;
+    color: var(--color-text-strong) !important;
+
+    fill: currentColor;
+    opacity: 1 !important;
+}
+
+
+/* =========================================================
+   7. LOCATION
+   ========================================================= */
+
+.location-section {
+    margin-top: 26px;
+}
+
+.location-hud {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    flex-wrap: wrap;
+}
+
+.location-status {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 8px;
+    min-height: 40px;
+
+    padding: 8px 14px;
+
+    border: 2px solid transparent;
+
+    border-radius: 50rem;
+    border-radius: var(--radius-pill);
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.status-loading {
+    background-color: #f5ecd8;
+    background-color: var(--color-surface-alt);
+
+    color: #4a3e35;
+    color: var(--color-text);
+
+    border-color: #e5d4bc;
+    border-color: var(--color-border);
+}
+
+.status-success {
+    background-color: #849b82;
+    background-color: var(--color-secondary);
+
+    color: #ffffff;
+
+    border-color: #697e67;
+    border-color: var(--color-secondary-dark);
+}
+
+.status-required {
+    background-color: #d49a6a;
+    background-color: var(--color-midday);
+
+    color: #ffffff;
+
+    border-color: #945332;
+    border-color: var(--color-primary-dark);
+}
+
+.location-editor {
+    margin-top: 18px;
+}
+
+.game-alert {
+    background-color: #f5ecd8;
+    background-color: var(--color-surface-alt);
+
+    color: #b56c46;
+    color: var(--color-primary);
+
+    border: 2px dashed #b56c46;
+    border-color: var(--color-primary);
+
+    border-radius: 12px;
+    border-radius: var(--radius-md);
+
+    padding: 10px 12px;
+    margin-bottom: 16px;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   8. CARDS / PANELS
+   ========================================================= */
+
+.card,
+.game-panel {
+    background-color: #ffffff !important;
+    background-color: var(--color-surface) !important;
+
+    color: #4a3e35 !important;
+    color: var(--color-text) !important;
+
+    border: 3px solid #e5d4bc !important;
+    border-color: var(--color-border) !important;
+
+    border-radius: 20px !important;
+    border-radius: var(--radius-xl) !important;
+
+    padding: 22px;
+
+    box-shadow: 0 6px 18px rgba(74, 62, 53, 0.06);
+    box-shadow: var(--shadow-card);
+}
+
+.card-header {
+    background-color: transparent !important;
+
+    color: #3b2f27;
+    color: var(--color-text-strong);
+
+    border-bottom: 2px dashed #e5d4bc !important;
+    border-color: var(--color-border) !important;
+
+    font-family:
+        "Playfair Display",
+        Georgia,
+        serif;
+    font-family: var(--font-heading);
+
+    font-size: 1.25rem;
+    font-weight: 700;
+
+    padding: 0 0 12px;
+    margin-bottom: 18px;
+}
+
+.panel-title {
+    color: #3b2f27;
+    color: var(--color-text-strong);
+
+    font-family:
+        "Playfair Display",
+        Georgia,
+        serif;
+    font-family: var(--font-heading);
+
+    font-size: 1.35rem;
+    font-weight: 700;
+
+    margin: 0 0 6px;
+}
+
+.panel-copy {
+    color: #8c7a6b;
+    color: var(--color-text-muted);
+
+    font-size: 14px;
+    line-height: 1.5;
+
+    margin: 0 0 20px;
+}
+
+
+/* =========================================================
+   9. FORMS
+   ========================================================= */
+
+.form-label {
+    color: #3b2f27 !important;
+    color: var(--color-text-strong) !important;
+
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.form-control,
+.form-select,
+.input-group-text {
+    background-color: #fbf7ee !important;
+    background-color: var(--color-bg) !important;
+
+    color: #4a3e35 !important;
+    color: var(--color-text) !important;
+
+    min-height: 46px;
+
+    border: 2px solid #e5d4bc !important;
+    border-color: var(--color-border) !important;
+
+    border-radius: 12px !important;
+    border-radius: var(--radius-md) !important;
+
+    padding: 10px 12px;
+}
+
+.form-control::placeholder {
+    color: #8c7a6b;
+    color: var(--color-text-muted);
+
+    opacity: 0.7;
+}
+
+.form-control:focus,
+.form-select:focus {
+    background-color: #ffffff !important;
+    background-color: var(--color-surface) !important;
+
+    color: #4a3e35 !important;
+    color: var(--color-text) !important;
+
+    border-color: #b56c46 !important;
+    border-color: var(--color-primary) !important;
+
+    box-shadow:
+        0 0 0 3px rgba(193, 123, 88, 0.18) !important;
+}
+
+
+/* =========================================================
+   10. BUTTONS
+   ========================================================= */
+
+.btn {
+    border-radius: 12px !important;
+    border-radius: var(--radius-md) !important;
+
+    font-weight: 800;
+    letter-spacing: 0.01em;
+
+    transition:
+        transform 0.08s ease,
+        box-shadow 0.08s ease,
+        background-color 0.08s ease;
+}
+
+.game-button {
+    min-height: 54px;
+    padding: 11px 18px;
+    font-size: 15px;
+}
+
+.btn-primary,
+.game-button-primary {
+    background-color: #b56c46 !important;
+    background-color: var(--color-primary) !important;
+
+    color: #ffffff !important;
+
+    border: 2px solid #945332 !important;
+    border-color: var(--color-primary-dark) !important;
+
+    box-shadow: 0 5px 0 #784227;
+    box-shadow: 0 5px 0 var(--color-primary-shadow);
+}
+
+.btn-primary:hover,
+.game-button-primary:hover {
+    background-color: #a45f3b !important;
+    background-color: var(--color-primary-hover) !important;
+
+    color: #ffffff !important;
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 6px 0 #784227;
+    box-shadow: 0 6px 0 var(--color-primary-shadow);
+}
+
+.btn-primary:active,
+.game-button-primary:active {
+    transform: translateY(3px);
+
+    box-shadow: 0 2px 0 #784227;
+    box-shadow: 0 2px 0 var(--color-primary-shadow);
+}
+
+.btn-secondary {
+    background-color: #849b82 !important;
+    background-color: var(--color-secondary) !important;
+
+    color: #ffffff !important;
+
+    border: 2px solid #697e67 !important;
+    border-color: var(--color-secondary-dark) !important;
+
+    box-shadow: 0 4px 0 #4f5f4e;
+    box-shadow: 0 4px 0 var(--color-secondary-shadow);
+}
+
+.btn-secondary:hover {
+    background-color: #758b73 !important;
+    background-color: var(--color-secondary-hover) !important;
+
+    color: #ffffff !important;
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 5px 0 #4f5f4e;
+    box-shadow: 0 5px 0 var(--color-secondary-shadow);
+}
+
+.btn-secondary:active {
+    transform: translateY(2px);
+
+    box-shadow: 0 1px 0 #4f5f4e;
+    box-shadow: 0 1px 0 var(--color-secondary-shadow);
+}
+
+.btn-compact {
+    min-height: 38px;
+    padding: 6px 13px;
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   11. RECOMMENDATION LAYOUT
+   ========================================================= */
+
+.recommendation-layout {
+    align-items: stretch;
+}
+
+.control-panel,
+.result-panel {
+    height: 100%;
+}
+
+.helper-text {
+    color: #a89985;
+    color: var(--color-text-faint);
+
+    text-align: center;
+
+    font-size: 12px;
+
+    margin-top: 14px;
+}
+
+
+/* =========================================================
+   12. EMPTY STATE
+   ========================================================= */
+
+.empty-state {
+    text-align: center;
+    padding: 46px 24px;
+}
+
+.empty-state-title {
+    color: #3b2f27;
+    color: var(--color-text-strong);
+
+    font-family:
+        "Playfair Display",
+        Georgia,
+        serif;
+    font-family: var(--font-heading);
+
+    font-size: 1.35rem;
+    font-weight: 700;
+
+    margin-bottom: 8px;
+}
+
+.empty-state-copy {
+    color: #8c7a6b;
+    color: var(--color-text-muted);
+
+    max-width: 420px;
+
+    margin: 0 auto;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   13. DAILY BRIEF
+   ========================================================= */
+
+.brief-heading {
+    color: #3b2f27;
+    color: var(--color-text-strong);
+
+    font-family:
+        "Playfair Display",
+        Georgia,
+        serif;
+    font-family: var(--font-heading);
+
+    font-size: 1.45rem;
+    font-weight: 700;
+
+    margin: 0;
+}
+
+.brief-subheading {
+    color: #8c7a6b;
+    color: var(--color-text-muted);
+
+    font-size: 13px;
+
+    margin: 3px 0 24px;
+}
+
+.game-divider,
+.email-divider {
+    border: 0;
+
+    border-top: 2px dashed #e5d4bc;
+    border-color: var(--color-border);
+
+    opacity: 1;
+
+    margin: 26px 0;
+}
+
+
+/* =========================================================
+   14. WEATHER
+   ========================================================= */
+
+.weather-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.weather-table td {
+    color: #4a3e35;
+    color: var(--color-text);
+
+    font-size: 15px;
+
+    padding: 10px 12px;
+}
+
+.weather-table tr:nth-child(even) {
+    background-color: #f5ecd8;
+    background-color: var(--color-surface-alt);
+}
+
+.weather-tile {
+    background-color: #f5ecd8;
+    background-color: var(--color-surface-alt);
+
+    text-align: center;
+
+    border: 2px solid #e5d4bc;
+    border-color: var(--color-border);
+
+    border-radius: 14px;
+    border-radius: var(--radius-lg);
+
+    padding: 14px 10px;
+}
+
+.weather-label {
+    color: #8c7a6b;
+    color: var(--color-text-muted);
+
+    font-size: 12px;
+    font-weight: 800;
+
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.weather-temperature {
+    color: #3b2f27;
+    color: var(--color-text-strong);
+
+    font-family:
+        "Playfair Display",
+        Georgia,
+        serif;
+    font-family: var(--font-heading);
+
+    font-size: 2rem;
+    font-weight: 700;
+
+    line-height: 1.1;
+
+    margin: 4px 0;
+}
+
+.weather-caption {
+    color: #a89985;
+    color: var(--color-text-faint);
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   15. OUTFIT / STYLE COMPONENTS
+   Shared by UI + Email
+   ========================================================= */
+
+.outfit-box {
+    background-color: #f5ecd8 !important;
+    background-color: var(--color-surface-alt) !important;
+
+    color: #4a3e35;
+    color: var(--color-text);
+
+    padding: 18px;
+    margin: 15px 0;
+
+    border: 2px solid #e5d4bc;
+    border-color: var(--color-border);
+
+    border-radius: 14px;
+    border-radius: var(--radius-lg);
+
+    box-sizing: border-box;
+}
+
+.outfit-box.morning,
+.morning {
+    border-left: 7px solid #849b82 !important;
+    border-left-color: var(--color-morning) !important;
+}
+
+.outfit-box.midday,
+.midday {
+    border-left: 7px solid #d49a6a !important;
+    border-left-color: var(--color-midday) !important;
+}
+
+.outfit-title {
+    color: #3b2f27;
+    color: var(--color-text-strong);
+
+    font-family:
+        "Playfair Display",
+        Georgia,
+        serif;
+    font-family: var(--font-heading);
+
+    font-size: 17px;
+    font-weight: 700;
+
+    margin: 0 0 6px;
+}
+
+.outfit-pieces {
+    color: #8c7a6b;
+    color: var(--color-text-muted);
+
+    font-size: 13px;
+    font-weight: 600;
+
+    margin-bottom: 10px;
+}
+
+.outfit-list {
+    color: #4a3e35;
+    color: var(--color-text);
+
+    margin: 0;
+    padding-left: 20px;
+}
+
+.outfit-list li {
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   16. INSIGHT
+   Shared by UI + Email
+   ========================================================= */
+
+.insight {
+    background-color: #f5ecd8 !important;
+    background-color: var(--color-surface-alt) !important;
+
+    color: #4a3e35;
+    color: var(--color-text);
+
+    border: 2px dashed #d9c5ab;
+    border-color: var(--color-border-strong);
+
+    border-radius: 14px;
+    border-radius: var(--radius-lg);
+
+    padding: 18px;
+    margin-top: 22px;
+}
+
+.insight-title {
+    color: #9c6b43;
+    color: var(--color-accent);
+
+    font-size: 15px;
+    font-weight: 800;
+
+    margin: 0 0 6px;
+}
+
+.insight p {
+    color: #4a3e35;
+    color: var(--color-text);
+
+    font-size: 14px;
+    font-style: italic;
+    line-height: 1.5;
+
+    margin: 0;
+}
+
+
+/* =========================================================
+   17. EMAIL
+   Literal fallbacks come first for older email clients
+   ========================================================= */
+
+.email-body {
+    background-color: #fbf7ee;
+    background-color: var(--color-bg);
+
+    color: #4a3e35;
+    color: var(--color-text);
+
+    font-family:
+        "Inter",
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        sans-serif;
+    font-family: var(--font-body);
+
+    margin: 0;
+    padding: 30px 10px;
+
+    line-height: 1.4;
+}
+
+.email-container {
+    width: 100%;
+    max-width: 600px;
+
+    box-sizing: border-box;
+
+    margin: 0 auto;
+    padding: 30px;
+
+    background-color: #ffffff;
+    background-color: var(--color-surface);
+
+    color: #4a3e35;
+    color: var(--color-text);
+
+    border: 3px solid #e5d4bc;
+    border-color: var(--color-border);
+
+    border-radius: 20px;
+    border-radius: var(--radius-xl);
+
+    box-shadow: 0 6px 18px rgba(74, 62, 53, 0.06);
+    box-shadow: var(--shadow-card);
+}
+
+.email-header {
+    color: #3b2f27;
+    color: var(--color-text-strong);
+
+    font-family:
+        "Playfair Display",
+        Georgia,
+        serif;
+    font-family: var(--font-heading);
+
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.2;
+
+    margin: 0 0 5px;
+}
+
+.email-sub {
+    color: #8c7a6b;
+    color: var(--color-text-muted);
+
+    font-size: 14px;
+
+    margin: 0 0 20px;
+}
+
+.footer {
+    color: #a89985;
+    color: var(--color-text-faint);
+
+    text-align: center;
+
+    margin-top: 35px;
+
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.footer strong {
+    color: #8c7a6b;
+    color: var(--color-text-muted);
+}
+
+
+/* =========================================================
+   18. EMAIL DARK MODE
+   Scoped to email only so it does not fight Shiny's toggle
+   ========================================================= */
+
+@media (prefers-color-scheme: dark) {
+    .email-body {
+        --color-bg: #463a32;
+        --color-surface: #342d29;
+        --color-surface-alt: #51443a;
+
+        --color-text: #e7ddd4;
+        --color-text-strong: #f4ece5;
+        --color-text-muted: #c0ada0;
+        --color-text-faint: #a89588;
+
+        --color-border: #796556;
+        --color-border-strong: #8b7563;
+
+        --color-accent: #d0a078;
+
+        --color-morning: #8fa58a;
+        --color-midday: #d49a6a;
+    }
+
+    .email-body {
+        background-color: #463a32 !important;
+        color: #e7ddd4 !important;
+    }
+
+    .email-container {
+        background-color: #342d29 !important;
+        color: #e7ddd4 !important;
+        border-color: #796556 !important;
+    }
+
+    .email-header {
+        color: #f4ece5 !important;
+    }
+
+    .email-sub {
+        color: #c0ada0 !important;
+    }
+
+    .email-divider {
+        border-top-color: #796556 !important;
+    }
+
+    .section-title {
+        color: #d0a078 !important;
+    }
+
+    .weather-table td {
+        color: #e7ddd4 !important;
+    }
+
+    .weather-table tr:nth-child(even) {
+        background-color: #51443a !important;
+    }
+
+    .outfit-box {
+        background-color: #51443a !important;
+        color: #e7ddd4 !important;
+        border-color: #796556 !important;
+    }
+
+    .outfit-title {
+        color: #f4ece5 !important;
+    }
+
+    .outfit-pieces {
+        color: #c0ada0 !important;
+    }
+
+    .outfit-list {
+        color: #e7ddd4 !important;
+    }
+
+    .insight {
+        background-color: #51443a !important;
+        color: #e7ddd4 !important;
+        border-color: #8b7563 !important;
+    }
+
+    .insight-title {
+        color: #d0a078 !important;
+    }
+
+    .insight p {
+        color: #e7ddd4 !important;
+    }
+
+    .footer {
+        color: #a89588 !important;
+    }
+
+    .footer strong {
+        color: #c0ada0 !important;
+    }
+}
+
+
+/* =========================================================
+   19. RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 767px) {
+    .app-shell {
+        padding: 18px 10px 32px;
+    }
+
+    .hero-panel {
+        padding: 20px 18px;
+        margin-bottom: 28px;
+    }
+
+    .hero-top-row {
+        align-items: flex-start;
+    }
+
+    .hero-header {
+        font-size: 2rem;
+    }
+
+    .location-section {
+        margin-top: 22px;
+    }
+
+    .card,
+    .game-panel {
+        padding: 18px;
+    }
+
+    .recommendation-layout {
+        gap: 16px;
+    }
+}

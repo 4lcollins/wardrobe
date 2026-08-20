@@ -1,51 +1,30 @@
-import requests
 from datetime import datetime, timezone
 
+import requests
+
 from src.core.calendar import Calendar
+from src.core.location import Location
 from src.settings import SETTINGS
 
+
 class Thermometer:
-    def __init__(self, city, state_abbr, verbose: bool = True):
+    def __init__(self, location: Location, verbose: bool = True):
         self.api_key = SETTINGS.openweathermap_key
         if not self.api_key:
-            raise ValueError("API Key not found. Please set it using os.environ['OPENWEATHERMAP_KEY'] = 'YOUR_API_KEY'")
-        
-        # Base URL for One Call 4.0
+            raise ValueError("API Key not found. Please set OPENWEATHERMAP_KEY.")
+
         self.temperature_api_url = "https://api.openweathermap.org/data/4.0/onecall"
-        self.geocode_api_url = "https://api.openweathermap.org/geo/1.0/direct"
-        self.city = city
-        self.state_abbr = state_abbr
+        self.location = location
         self.verbose = verbose
 
-    def __get_location_coordinates_api(self) -> dict[str, float]:
-        """
-        Fetch the latitude and longitude of a given city using OpenWeatherMap API.
-        Returns a dict with 'lat' and 'lon'.
-        """
-        params = {
-            "q": f"{self.city},{self.state_abbr},USA",
-            "limit": 1,
-            "appid": self.api_key
-        }
-        response = requests.get(self.geocode_api_url, params=params)
-        response.raise_for_status()
-        data = response.json()
-        if data:
-            lat = data[0].get("lat")
-            lon = data[0].get("lon")
-            if self.verbose:
-                print(f"Found coordinates for {self.city}, {self.state_abbr}: ({lat}, {lon})")
-            return {"lat": lat, "lon": lon}
-        raise ValueError("Location Not Found")
-
     def _get_forecast(self) -> dict:
-        coordinates = self.__get_location_coordinates_api()
+        coords = self.location.get_coordinates()
 
         params = {
             "appid": self.api_key,
-            "lat": coordinates["lat"],
-            "lon": coordinates["lon"],
-            "units": "imperial"
+            "lat": coords["lat"],
+            "lon": coords["lon"],
+            "units": "imperial",
         }
         endpoint_url = f"{self.temperature_api_url}/timeline/1h"
         response = requests.get(endpoint_url, params=params)

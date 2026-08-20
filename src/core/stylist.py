@@ -1,11 +1,14 @@
-import random
+import logging
 import math
+import random
+
 from pydantic import BaseModel
-from dataclasses import dataclass
 
 from src.core.calendar import Calendar
 from src.core.thermometer import Thermometer
-from src.core.llm import Prompt
+from src.utils.llm import Prompt
+
+logger = logging.getLogger(__name__)
 
 class ClothingRecommendation(BaseModel):
     insight: str
@@ -136,15 +139,21 @@ class Stylist:
             f"Only make suggestions from the clothing options given to you. Do not fabricate additional items."
         )
 
+        insight = None
         try:
             clothing_recommendation = Prompt(
                 model="gemini-3.5-flash",
                 content=prompt_content,
                 response_schema=ClothingRecommendation
             ).generate()
-            insight = getattr(clothing_recommendation, "insight", None)
+            
+            if hasattr(clothing_recommendation, "parsed"):
+                insight = clothing_recommendation.parsed.insight
+            else:
+                insight = getattr(clothing_recommendation, "insight", None)
+                
         except Exception:
-            insight = None
+            logger.exception("Failed to generate stylist insight via LLM prompt.")
 
         return {
             "time_periods": time_periods,

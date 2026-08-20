@@ -1,4 +1,4 @@
-name: Daily Wardrobe Brief
+name: Your Daily Outfit
 
 on:
   workflow_dispatch:
@@ -28,4 +28,4 @@ jobs:
         run: uv sync --no-dev
 
       - name: Send daily brief
-        run: uv run python -m src.automations.runner daily_brief
+        run: uv run python -m src.automations.runner daily_outfit

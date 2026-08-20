@@ -16,4 +16,4 @@ run:
 	fi
 
 automation:
-	python -m src.automations.runner daily_brief
+	python -m src.automations.runner daily_outfit
