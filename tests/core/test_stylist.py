@@ -1,12 +1,9 @@
 from src.core.stylist import Stylist
-from src.core.thermometer import Thermometer
 
 
 class TestRecommendClothing:
     def test_recommends_clothing_for_each_day_period(self, monkeypatch):
-        class FakeThermometer(Thermometer):
-            def __init__(city = "", state = ""):
-                pass
+        class FakeThermometer:
             def get_period_temperatures(self, calendar=None):
                 return [
                     {"period": type("Period", (), {"name": "Morning"})(), "temperature": 45},
@@ -15,7 +12,7 @@ class TestRecommendClothing:
 
         monkeypatch.setattr(
             "src.core.stylist.Prompt.generate",
-            lambda user_input, model_class: model_class(insight="Layer up, then simplify."),
+            lambda self: self.response_schema(insight="Layer up, then simplify."),
         )
         monkeypatch.setattr("src.core.stylist.random.choice", lambda options: options[0])
 

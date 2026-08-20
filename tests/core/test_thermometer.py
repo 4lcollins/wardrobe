@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 
-from src.core.calendar import Calendar
+from src.core.calendar import TimeOfDayPeriod
 from src.core.thermometer import Thermometer
 
 
@@ -27,7 +27,7 @@ class TestGetPeriodTemperatures:
             "_get_forecast",
             lambda: {
                 "timezone_offset": -6 * 60 * 60,
-                "hourly": [
+                "data": [
                     {"dt": timestamps[0], "feels_like": 40},
                     {"dt": timestamps[1], "feels_like": 50},
                     {"dt": timestamps[2], "feels_like": 70},
@@ -35,7 +35,17 @@ class TestGetPeriodTemperatures:
                 ],
             },
         )
-        calendar = Calendar()
+        calendar = type(
+            "Calendar",
+            (),
+            {
+                "active_time_of_day_periods": [
+                    TimeOfDayPeriod("Morning", 6, 12),
+                    TimeOfDayPeriod("Afternoon", 12, 17),
+                    TimeOfDayPeriod("Evening", 17, 24),
+                ]
+            },
+        )()
 
         period_temperatures = thermometer.get_period_temperatures(calendar)
 
