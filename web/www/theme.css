@@ -1415,10 +1415,18 @@ html.shiny-busy::before {
 
     .hero-top-row {
         align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .brand-mark {
+        min-width: 0;
+        flex: 1 1 100%;
     }
 
     .header-actions {
         gap: 8px;
+        width: 100%;
+        flex-wrap: wrap;
     }
 
     .hero-header {
