@@ -848,6 +848,13 @@ a:hover {
     margin-right: auto;
 }
 
+.login-card label,
+.login-card .form-label,
+.login-card .control-label {
+    display: block;
+    text-align: left !important;
+}
+
 .login-card .form-group {
     margin-bottom: 18px;
 }
@@ -867,48 +874,14 @@ a:hover {
    12. SHINY LOADING
    ========================================================= */
 
-.shiny-progress-container {
-    height: 5px;
-    z-index: 3000;
+.shiny-progress-container,
+.shiny-progress {
+    display: none !important;
 }
 
-.shiny-progress .progress {
-    height: 5px !important;
-    overflow: hidden;
-
-    background-color: #e5d4bc !important;
-    background-color: var(--color-border) !important;
-
-    border-radius: 0;
-}
-
-.shiny-progress .bar,
-.shiny-progress .progress-bar {
-    background-color: #849b82 !important;
-    background-color: var(--color-secondary) !important;
-
-    opacity: 1;
-
-    box-shadow:
-        0 0 12px rgba(132, 155, 130, 0.55),
-        inset 0 -1px 0 rgba(59, 47, 39, 0.2);
-}
-
-.shiny-progress .progress-text {
-    background-color: #ffffff !important;
-    background-color: var(--color-surface) !important;
-
-    color: #4a3e35 !important;
-    color: var(--color-text) !important;
-
-    border: 2px solid #e5d4bc;
-    border-color: var(--color-border);
-
-    border-radius: 8px;
-    border-radius: var(--radius-sm);
-
-    box-shadow: 0 6px 18px rgba(74, 62, 53, 0.06);
-    box-shadow: var(--shadow-card);
+html.shiny-busy::after {
+    display: none !important;
+    content: none !important;
 }
 
 html.shiny-busy::before {
@@ -919,13 +892,13 @@ html.shiny-busy::before {
     right: 18px;
     z-index: 100000;
 
-    width: 34px;
-    height: 34px;
+    width: 46px;
+    height: 46px;
 
     background-color: #ffffff;
     background-color: var(--color-surface);
 
-    border: 5px solid #e5d4bc;
+    border: 6px solid #e5d4bc;
     border-color: var(--color-border);
     border-top-color: #849b82;
     border-top-color: var(--color-secondary);

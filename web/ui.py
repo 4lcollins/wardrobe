@@ -21,6 +21,7 @@ def page_content_ui(
 
 
 app_ui = ui.page_fluid(
+    ui.busy_indicators.use(spinners=False, pulse=False),
     ui.include_css(css_path),
     ui.output_ui("page_content"),
 )
