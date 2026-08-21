@@ -1324,6 +1324,20 @@ html.shiny-busy::before {
     margin: 0 0 20px;
 }
 
+.email-icon-row {
+    text-align: center;
+    margin: 0 0 22px;
+}
+
+.email-icon {
+    display: inline-block;
+    width: 72px;
+    height: 72px;
+    object-fit: contain;
+    margin: 0 6px;
+    vertical-align: middle;
+}
+
 .footer {
     color: #a89985;
     color: var(--color-text-faint);

@@ -17,6 +17,18 @@
         Styled for <strong>{{ city }}, {{ state }}</strong>
     </div>
 
+    {% if icon %}
+    <div class="email-icon-row">
+        <img
+            src="{{ icon.src }}"
+            alt="{{ icon.alt }}"
+            width="72"
+            height="72"
+            class="email-icon"
+        >
+    </div>
+    {% endif %}
+
     <hr class="email-divider">
 
     <div class="section-title">🌤️ Weather Forecast</div>
