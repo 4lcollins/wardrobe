@@ -189,6 +189,7 @@ a:hover {
 
 .app-shell {
     width: min(1100px, 100%);
+    box-sizing: border-box;
     margin: 0 auto;
     padding: 32px 18px 48px;
 }
@@ -307,6 +308,16 @@ a:hover {
     gap: 14px;
 }
 
+.brand-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.brand-copy .hero-kicker {
+    margin-top: 0;
+}
+
 .brand-logo {
     width: 64px;
     height: 64px;
@@ -321,6 +332,12 @@ a:hover {
 
     gap: 12px;
     flex-shrink: 0;
+}
+
+.header-actions .sub-header {
+    margin: 0;
+    white-space: nowrap;
+    font-weight: 800;
 }
 
 
@@ -714,6 +731,39 @@ a:hover {
 
     box-shadow: 0 1px 0 #4f5f4e;
     box-shadow: 0 1px 0 var(--color-secondary-shadow);
+}
+
+.btn-muted {
+    background-color: #8c7a6b !important;
+    background-color: var(--color-text-muted) !important;
+
+    color: #ffffff !important;
+
+    border: 2px solid #5c4a3d !important;
+    border-color: var(--color-banner-border) !important;
+
+    box-shadow: 0 4px 0 #5c4a3d;
+    box-shadow: 0 4px 0 var(--color-banner-border);
+}
+
+.btn-muted:hover {
+    background-color: #a89985 !important;
+    background-color: var(--color-text-faint) !important;
+
+    color: #fbf7ee !important;
+    color: var(--color-banner-text) !important;
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 5px 0 #5c4a3d;
+    box-shadow: 0 5px 0 var(--color-banner-border);
+}
+
+.btn-muted:active {
+    transform: translateY(2px);
+
+    box-shadow: 0 1px 0 #5c4a3d;
+    box-shadow: 0 1px 0 var(--color-banner-border);
 }
 
 .btn-compact {
@@ -1404,8 +1454,8 @@ html.shiny-busy::before {
     }
 
     .login-shell {
-        min-height: auto;
-        justify-content: flex-start;
+        min-height: 100svh;
+        justify-content: center;
     }
 
     .hero-panel {
@@ -1415,10 +1465,27 @@ html.shiny-busy::before {
 
     .hero-top-row {
         align-items: flex-start;
+        flex-direction: column;
+        flex-wrap: wrap;
+    }
+
+    .brand-mark {
+        min-width: 0;
+        flex: 1 1 100%;
+    }
+
+    .brand-copy {
+        gap: 10px;
     }
 
     .header-actions {
-        gap: 8px;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 12px;
+        width: fit-content;
+        max-width: 100%;
+        flex-wrap: wrap;
     }
 
     .hero-header {

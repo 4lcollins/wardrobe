@@ -94,7 +94,7 @@ def test_list_active_users_filters_email_enabled(monkeypatch):
     assert fake_client.query.filters == [("is_email_enabled", True)]
 
 
-def test_get_active_user_by_email(monkeypatch):
+def test_get_user_by_email(monkeypatch):
     fake_client = FakeSupabase(
         [
             {
@@ -109,19 +109,18 @@ def test_get_active_user_by_email(monkeypatch):
     )
     monkeypatch.setattr(users, "get_supabase", lambda: fake_client)
 
-    found_user = users.get_active_user_by_email(" One@Example.com ")
+    found_user = users.get_user_by_email(" One@Example.com ")
 
     assert found_user["email"] == "one@example.com"
     assert fake_client.query.filters == [
-        ("is_email_enabled", True),
         ("email", "one@example.com"),
     ]
     assert fake_client.query.limit_count == 1
 
 
-def test_get_active_user_by_email_skips_blank_email(monkeypatch):
+def test_get_user_by_email_skips_blank_email(monkeypatch):
     fake_client = FakeSupabase([])
     monkeypatch.setattr(users, "get_supabase", lambda: fake_client)
 
-    assert users.get_active_user_by_email(" ") is None
+    assert users.get_user_by_email(" ") is None
     assert fake_client.query is None

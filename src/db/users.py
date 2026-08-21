@@ -20,7 +20,7 @@ def list_user_emails() -> list[str]:
     return [user["email"] for user in users if user.get("email")]
 
 
-def get_active_user_by_email(email: str) -> dict[str, Any] | None:
+def get_user_by_email(email: str) -> dict[str, Any] | None:
     normalized_email = email.strip().lower()
 
     if not normalized_email:
@@ -30,7 +30,6 @@ def get_active_user_by_email(email: str) -> dict[str, Any] | None:
         get_supabase()
         .table("user")
         .select("id,created_at,email,first_name,last_name,is_email_enabled")
-        .eq("is_email_enabled", True)
         .eq("email", normalized_email)
         .limit(1)
         .execute()
