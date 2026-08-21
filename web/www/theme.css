@@ -1315,13 +1315,34 @@ html.shiny-busy::before {
     margin: 0 0 5px;
 }
 
+.email-heading {
+    margin: 0 0 20px;
+}
+
+.email-heading-copy {
+    vertical-align: top;
+}
+
+.email-heading-icon {
+    width: 84px;
+    vertical-align: top;
+}
+
 .email-sub {
     color: #8c7a6b;
     color: var(--color-text-muted);
 
     font-size: 14px;
 
-    margin: 0 0 20px;
+    margin: 0;
+}
+
+.email-icon {
+    display: block;
+    width: 72px;
+    height: 72px;
+    object-fit: contain;
+    margin: 0 0 0 auto;
 }
 
 .footer {
