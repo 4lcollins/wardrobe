@@ -3,11 +3,12 @@ create table if not exists public."user" (
     created_at timestamptz not null default now(),
     email text not null unique,
     first_name text,
-    last_name text
+    last_name text,
+    is_email_enabled boolean not null default true
 );
 
-create index if not exists user_email_idx
-    on public."user" (email);
+create index if not exists user_is_email_enabled_email_idx
+    on public."user" (is_email_enabled, email);
 
 alter table public."user" enable row level security;
 
@@ -17,4 +18,4 @@ create policy "Users are readable by anon"
     on public."user"
     for select
     to anon
-    using (true);
+    using (is_email_enabled = true);

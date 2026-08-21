@@ -2,7 +2,7 @@
 
 PROJECT_REF ?= $(SUPABASE_PROJECT_REF)
 
-.PHONY: automation requirements app supabase-plan supabase-apply
+.PHONY: automation requirements app supabase-plan supabase-apply supabase-reset
 
 requirements:
 	uv lock --upgrade
@@ -43,3 +43,12 @@ supabase-apply:
 	else \
 		supabase db push; \
 	fi
+
+supabase-reset:
+	@if [ -z "$(PROJECT_REF)" ]; then \
+		echo "Usage: make supabase-reset PROJECT_REF=<project-ref>"; \
+		echo "Or set SUPABASE_PROJECT_REF in .env"; \
+		exit 1; \
+	fi
+	supabase link --project-ref $(PROJECT_REF)
+	supabase db reset --linked

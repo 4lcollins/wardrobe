@@ -4,7 +4,7 @@ from src.core import (
     Stylist,
     Thermometer,
     )
-from src.settings import SETTINGS
+from src.db.users import list_user_emails
 from src.utils.email import send_email
 from src.utils.template import render_template
 
@@ -32,5 +32,5 @@ def run():
     send_email(
         subject="Your Daily Outfit",
         body=message,
-        bcc_emails=SETTINGS.recipient_emails,
+        bcc_emails=list_user_emails(),
     )

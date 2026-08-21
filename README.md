@@ -60,3 +60,9 @@ Only use seed data for development or testing:
 ```sh
 make supabase-apply SEED=1
 ```
+
+To rebuild a throwaway development database from scratch:
+
+```sh
+make supabase-reset
+```
