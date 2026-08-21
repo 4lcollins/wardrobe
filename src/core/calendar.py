@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from datetime import datetime
 
 
 @dataclass(frozen=True)
@@ -26,10 +25,11 @@ class Calendar:
     def __init__(self):
         self.time_of_day_periods = DEFAULT_TIME_OF_DAY_PERIODS
 
-    @property
-    def active_time_of_day_periods(self) -> list[TimeOfDayPeriod]:
-        current_hour = datetime.now().hour
+    def active_time_of_day_periods(
+        self,
+        timezone_hour: int,
+    ) -> list[TimeOfDayPeriod]:
         return [
             period for period in self.time_of_day_periods
-            if period.is_active_or_upcoming(current_hour)
+            if period.is_active_or_upcoming(timezone_hour)
         ]

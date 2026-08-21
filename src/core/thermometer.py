@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 import requests
 
@@ -38,15 +38,23 @@ class Thermometer:
             timezone.utc,
         )
 
+    @staticmethod
+    def _target_timezone_hour(timezone_offset_seconds: int) -> int:
+        return (
+            datetime.now(timezone.utc)
+            + timedelta(seconds=timezone_offset_seconds)
+        ).hour
+
     def get_period_temperatures(self, calendar: Calendar | None = None) -> list[dict]:
         calendar = calendar or Calendar()
 
         forecast = self._get_forecast()
         hourly_temperature = forecast.get("data", [])
         timezone_offset_seconds = forecast.get("timezone_offset", 0)
+        timezone_hour = self._target_timezone_hour(timezone_offset_seconds)
 
         period_temperatures = []
-        for period in calendar.active_time_of_day_periods:
+        for period in calendar.active_time_of_day_periods(timezone_hour):
             temps = [
                 h.get("feels_like")
                 for h in hourly_temperature

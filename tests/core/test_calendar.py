@@ -30,3 +30,11 @@ class TestCalendar:
             "Afternoon",
             "Evening",
         ]
+
+    def test_filters_periods_from_timezone_hour(self):
+        calendar = Calendar()
+
+        assert [period.name for period in calendar.active_time_of_day_periods(14)] == [
+            "Afternoon",
+            "Evening",
+        ]

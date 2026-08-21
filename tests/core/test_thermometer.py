@@ -13,6 +13,16 @@ class TestTargetDatetime:
 
         assert target_datetime.hour == 6
 
+    def test_uses_target_timezone_offset_for_timezone_hour(self, monkeypatch):
+        class FixedDatetime(datetime):
+            @classmethod
+            def now(cls, tz=None):
+                return cls(2026, 6, 7, 12, tzinfo=tz)
+
+        monkeypatch.setattr("src.core.thermometer.datetime", FixedDatetime)
+
+        assert Thermometer._target_timezone_hour(-6 * 60 * 60) == 6
+
 
 class TestGetPeriodTemperatures:
     def test_groups_temperatures_by_day_period(self, monkeypatch):
@@ -37,17 +47,18 @@ class TestGetPeriodTemperatures:
                 ],
             },
         )
-        calendar = type(
-            "Calendar",
-            (),
-            {
-                "active_time_of_day_periods": [
+        monkeypatch.setattr(thermometer, "_target_timezone_hour", lambda offset: 6)
+
+        class Calendar:
+            def active_time_of_day_periods(self, timezone_hour):
+                assert timezone_hour == 6
+                return [
                     TimeOfDayPeriod("Morning", 6, 12),
                     TimeOfDayPeriod("Afternoon", 12, 17),
                     TimeOfDayPeriod("Evening", 17, 24),
                 ]
-            },
-        )()
+
+        calendar = Calendar()
 
         period_temperatures = thermometer.get_period_temperatures(calendar)
 
