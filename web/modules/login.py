@@ -1,6 +1,6 @@
 from shiny import module, reactive, render, ui
 
-from src.db.users import get_active_user_by_email
+from src.db.users import get_user_by_email
 
 
 LOGIN_ART = [
@@ -111,7 +111,7 @@ def login_server(input, output, session):
         email = input.login_email()
 
         try:
-            user = get_active_user_by_email(email)
+            user = get_user_by_email(email)
         except Exception:
             login_error_message.set("Login is temporarily unavailable. Try again soon.")
             return
