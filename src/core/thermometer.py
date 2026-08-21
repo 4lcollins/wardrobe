@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta, timezone
+from typing import TypedDict
 
 import requests
 
@@ -7,15 +8,19 @@ from src.core.location import Location
 from src.settings import SETTINGS
 
 
+class ForecastHour(TypedDict):
+    datetime: datetime
+    feels_like: float
+
+
 class Thermometer:
-    def __init__(self, location: Location, verbose: bool = True):
+    def __init__(self, location: Location):
         self.api_key = SETTINGS.openweathermap_key
         if not self.api_key:
             raise ValueError("API Key not found. Please set OPENWEATHERMAP_KEY.")
 
         self.temperature_api_url = "https://api.openweathermap.org/data/4.0/onecall"
         self.location = location
-        self.verbose = verbose
 
     def _get_forecast(self) -> dict:
         coords = self.location.get_coordinates()
@@ -32,18 +37,27 @@ class Thermometer:
         return response.json()
 
     @staticmethod
-    def _target_datetime(timestamp: int, timezone_offset_seconds: int) -> datetime:
-        return datetime.fromtimestamp(
-            timestamp + timezone_offset_seconds,
-            timezone.utc,
-        )
+    def _apply_timezone_offset(
+        utc_datetime: datetime,
+        timezone_offset_seconds: int,
+    ) -> datetime:
+        return utc_datetime + timedelta(seconds=timezone_offset_seconds)
 
-    @staticmethod
-    def _target_timezone_hour(timezone_offset_seconds: int) -> int:
-        return (
-            datetime.now(timezone.utc)
-            + timedelta(seconds=timezone_offset_seconds)
-        ).hour
+    def _parse_forecast_hours(
+        self,
+        hourly_temperature: list[dict],
+        timezone_offset_seconds: int,
+    ) -> list[ForecastHour]:
+        return [
+            {
+                "datetime": self._apply_timezone_offset(
+                    datetime.fromtimestamp(h.get("dt"), timezone.utc),
+                    timezone_offset_seconds,
+                ),
+                "feels_like": h.get("feels_like"),
+            }
+            for h in hourly_temperature
+        ]
 
     def get_period_temperatures(self, calendar: Calendar | None = None) -> list[dict]:
         calendar = calendar or Calendar()
@@ -51,16 +65,28 @@ class Thermometer:
         forecast = self._get_forecast()
         hourly_temperature = forecast.get("data", [])
         timezone_offset_seconds = forecast.get("timezone_offset", 0)
-        timezone_hour = self._target_timezone_hour(timezone_offset_seconds)
+        forecast_start = self._apply_timezone_offset(
+            datetime.now(timezone.utc),
+            timezone_offset_seconds,
+        )
+        forecast_hours = self._parse_forecast_hours(
+            hourly_temperature,
+            timezone_offset_seconds,
+        )
+        forecast_datetimes = [
+            forecast_hour["datetime"]
+            for forecast_hour in forecast_hours
+        ]
 
         period_temperatures = []
-        for period in calendar.active_time_of_day_periods(timezone_hour):
+        for period in calendar.map_forecast_to_periods(
+            forecast_start,
+            forecast_datetimes,
+        ):
             temps = [
-                h.get("feels_like")
-                for h in hourly_temperature
-                if period.contains(
-                    self._target_datetime(h.get("dt"), timezone_offset_seconds).hour
-                )
+                forecast_hour["feels_like"]
+                for forecast_hour in forecast_hours
+                if period.contains(forecast_hour["datetime"])
             ]
             if temps:
                 period_temperatures.append(

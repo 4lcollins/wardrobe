@@ -41,7 +41,7 @@
         <tbody>
         {% for period in time_periods %}
         <tr>
-            <td><strong>{{ period.name }}</strong></td>
+            <td><strong>{{ period.display_date }} - {{ period.name }}</strong></td>
             <td align="right"><strong>{{ period.temperature }}°F</strong></td>
         </tr>
         {% endfor %}
@@ -50,10 +50,10 @@
 
     <hr class="email-divider">
 
-    <div class="section-title">👕 Today's Outfits</div>
+    <div class="section-title">👕 Recommended Outfits</div>
     {% for period in time_periods %}
     <div class="outfit-box {% if loop.index == 1 %}morning{% else %}midday{% endif %}">
-        <div class="outfit-title">{{ period.name }} Outfit</div>
+        <div class="outfit-title">{{ period.display_date }} {{ period.name }} Outfit</div>
         <div class="outfit-pieces">
             {{ period.num_clothing_pieces }} pieces
         </div>

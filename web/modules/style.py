@@ -30,7 +30,7 @@ def style_ui():
 
         ui.div(
             ui.card(
-                ui.card_header("Today's Style"),
+                ui.card_header("Stylized Outfit"),
                 ui.output_ui("display_output"),
             ),
         ),
@@ -61,7 +61,6 @@ def style_server(
         calendar = Calendar()
         thermometer = Thermometer(
             location=location,
-            verbose=True,
         )
         stylist = Stylist(thermometer=thermometer)
 
@@ -82,7 +81,7 @@ def style_server(
                     class_="empty-state-title",
                 ),
                 ui.p(
-                    "Generate a recommendation to see today's weather and suggested outfits.",
+                    "Generate a recommendation to see suggested outfits for today's weather.",
                     class_="empty-state-copy",
                 ),
                 class_="empty-state",
@@ -124,7 +123,7 @@ def style_server(
         weather_tiles = [
             ui.div(
                 ui.div(
-                    period["name"],
+                    f"{period['display_date']} - {period['name']}",
                     class_="weather-label",
                 ),
                 ui.div(
@@ -159,7 +158,7 @@ def style_server(
             outfit_cards.append(
                 ui.div(
                     ui.h4(
-                        f"{period['name']} Style",
+                        f"{period['display_date']} {period['name']}",
                         class_="outfit-title",
                     ),
 
@@ -209,7 +208,7 @@ def style_server(
             ),
 
             ui.p(
-                "Your weather-aware styling recommendation for today.",
+                "Your weather-aware styling recommendation.",
                 class_="brief-subheading",
             ),
 
