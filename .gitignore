@@ -9,6 +9,10 @@ __pycache__/
 .venv/
 .env
 
+# Supabase local CLI state
+supabase/.temp/
+supabase/.branches/
+
 # IDE / editor
 .vscode/
 .posit/
