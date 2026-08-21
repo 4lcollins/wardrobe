@@ -12,8 +12,9 @@ jobs:
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
       OPENWEATHERMAP_KEY: ${{ secrets.OPENWEATHERMAP_KEY }}
-      RECIPIENT_EMAILS: ${{ secrets.RECIPIENT_EMAILS }}
       SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
+      SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
     steps:
       - uses: actions/checkout@v4
 

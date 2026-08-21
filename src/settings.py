@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+
 from dotenv import load_dotenv
 
 # Path resolution
@@ -10,13 +11,6 @@ PROJECT_DIR = SRC_DIR.parent
 load_dotenv(PROJECT_DIR / ".env")
 
 
-def parse_email_list(value: str) -> list[str]:
-    """Parses a comma- or newline-delimited string into a clean list of emails."""
-    if not value:
-        return []
-    return [email.strip() for email in value.replace("\n", ",").split(",") if email.strip()]
-
-
 class Settings:
     def __init__(self):
         self.app_env: str = os.getenv("APP_ENV", "dev")
@@ -24,7 +18,8 @@ class Settings:
         self.gmail_app_password: str = os.getenv("GMAIL_APP_PASSWORD", "")
         self.openweathermap_key: str = os.getenv("OPENWEATHERMAP_KEY", "")
         self.gemini_api_key: str = os.getenv("GEMINI_API_KEY", "")
-        self.recipient_emails: list[str] = parse_email_list(os.getenv("RECIPIENT_EMAILS", ""))
+        self.supabase_url: str = os.getenv("SUPABASE_URL", "")
+        self.supabase_key: str = os.getenv("SUPABASE_KEY", "")
 
 
 SETTINGS = Settings()

@@ -37,4 +37,26 @@ Required configuration:
 
 ## Supabase
 
-The initial schema lives in `supabase/migrations/`. The app uses active rows in the Supabase `users` table for email automation recipients.
+Database schema changes live in `supabase/migrations/`.
+
+Install the Supabase CLI on macOS:
+
+```sh
+brew install supabase/tap/supabase
+supabase login
+```
+
+Use separate Supabase projects for local development and production. Point local `.env` values at the development project, and keep production values in deployment secrets.
+
+Set `SUPABASE_PROJECT_REF` in `.env`, or pass `PROJECT_REF` directly. To apply pending migrations:
+
+```sh
+make supabase-plan
+make supabase-apply
+```
+
+Only use seed data for development or testing:
+
+```sh
+make supabase-apply SEED=1
+```
