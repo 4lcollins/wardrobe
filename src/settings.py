@@ -3,12 +3,15 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
+from src.utils.doppler import import_doppler_secrets
+
 # Path resolution
 SRC_DIR = Path(__file__).resolve().parent
 PROJECT_DIR = SRC_DIR.parent
 
 # Load environment variables from .env file at project root
 load_dotenv(PROJECT_DIR / ".env")
+import_doppler_secrets()
 
 
 class Settings:

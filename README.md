@@ -26,7 +26,12 @@ Use the Posit Publisher VS Code extension to create or update the Shiny deployme
 
 Daily briefs run from GitHub Actions in `.github/workflows/daily-brief.yml`.
 
-Required configuration:
+Required runtime configuration is loaded from Doppler. Keep only bootstrap values in `.env`:
+
+- `APP_ENV`
+- `DOPPLER_TOKEN`
+
+Store application secrets in Doppler, including:
 
 - `GEMINI_API_KEY`
 - `GMAIL_APP_PASSWORD`
