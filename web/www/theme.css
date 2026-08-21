@@ -862,8 +862,95 @@ a:hover {
     margin-bottom: 18px;
 }
 
+
 /* =========================================================
-   12. EMPTY STATE
+   12. SHINY LOADING
+   ========================================================= */
+
+.shiny-progress-container {
+    height: 5px;
+    z-index: 3000;
+}
+
+.shiny-progress .progress {
+    height: 5px !important;
+    overflow: hidden;
+
+    background-color: #e5d4bc !important;
+    background-color: var(--color-border) !important;
+
+    border-radius: 0;
+}
+
+.shiny-progress .bar,
+.shiny-progress .progress-bar {
+    background-color: #849b82 !important;
+    background-color: var(--color-secondary) !important;
+
+    opacity: 1;
+
+    box-shadow:
+        0 0 12px rgba(132, 155, 130, 0.55),
+        inset 0 -1px 0 rgba(59, 47, 39, 0.2);
+}
+
+.shiny-progress .progress-text {
+    background-color: #ffffff !important;
+    background-color: var(--color-surface) !important;
+
+    color: #4a3e35 !important;
+    color: var(--color-text) !important;
+
+    border: 2px solid #e5d4bc;
+    border-color: var(--color-border);
+
+    border-radius: 8px;
+    border-radius: var(--radius-sm);
+
+    box-shadow: 0 6px 18px rgba(74, 62, 53, 0.06);
+    box-shadow: var(--shadow-card);
+}
+
+html.shiny-busy::before {
+    content: "";
+
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    z-index: 100000;
+
+    width: 34px;
+    height: 34px;
+
+    background-color: #ffffff;
+    background-color: var(--color-surface);
+
+    border: 5px solid #e5d4bc;
+    border-color: var(--color-border);
+    border-top-color: #849b82;
+    border-top-color: var(--color-secondary);
+    border-radius: 50%;
+
+    box-shadow:
+        0 3px 0 rgba(59, 47, 39, 0.18),
+        0 6px 18px rgba(74, 62, 53, 0.16);
+
+    animation: wardrobe-loading-spinner 1.4s steps(8) infinite;
+}
+
+@keyframes wardrobe-loading-spinner {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* =========================================================
+   13. EMPTY STATE
    ========================================================= */
 
 .empty-state {
@@ -900,7 +987,7 @@ a:hover {
 
 
 /* =========================================================
-   13. DAILY BRIEF
+   14. DAILY BRIEF
    ========================================================= */
 
 .brief-heading {
@@ -942,7 +1029,7 @@ a:hover {
 
 
 /* =========================================================
-   14. WEATHER
+   15. WEATHER
    ========================================================= */
 
 .weather-table {
@@ -1017,7 +1104,7 @@ a:hover {
 
 
 /* =========================================================
-   15. OUTFIT / STYLE COMPONENTS
+   16. OUTFIT / STYLE COMPONENTS
    Shared by UI + Email
    ========================================================= */
 
@@ -1093,7 +1180,7 @@ a:hover {
 
 
 /* =========================================================
-   16. INSIGHT
+   17. INSIGHT
    Shared by UI + Email
    ========================================================= */
 
@@ -1137,7 +1224,7 @@ a:hover {
 
 
 /* =========================================================
-   17. EMAIL
+   18. EMAIL
    Literal fallbacks come first for older email clients
    ========================================================= */
 
@@ -1233,7 +1320,7 @@ a:hover {
 
 
 /* =========================================================
-   18. EMAIL DARK MODE
+   19. EMAIL DARK MODE
    Scoped to email only so it does not fight Shiny's toggle
    ========================================================= */
 
@@ -1335,7 +1422,7 @@ a:hover {
 
 
 /* =========================================================
-   19. RESPONSIVE
+   20. RESPONSIVE
    ========================================================= */
 
 @media (max-width: 767px) {
