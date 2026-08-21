@@ -8,6 +8,7 @@ on:
 jobs:
   daily-brief:
     runs-on: ubuntu-latest
+    environment: wardrobe-prod
     env:
       APP_ENV: prod
       DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
