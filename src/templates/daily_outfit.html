@@ -12,22 +12,27 @@
 <body class="email-body">
 <div class="email-container">
 
-    <div class="email-header">✨ Your Daily Style Guide</div>
-    <div class="email-sub">
-        Styled for <strong>{{ city }}, {{ state }}</strong>
-    </div>
-
-    {% if icon %}
-    <div class="email-icon-row">
-        <img
-            src="{{ icon.src }}"
-            alt="{{ icon.alt }}"
-            width="72"
-            height="72"
-            class="email-icon"
-        >
-    </div>
-    {% endif %}
+    <table class="email-heading" role="presentation" width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+            <td class="email-heading-copy">
+                <div class="email-header">✨ Your Daily Style Guide</div>
+                <div class="email-sub">
+                    Styled for <strong>{{ city }}, {{ state }}</strong>
+                </div>
+            </td>
+            {% if icon %}
+            <td class="email-heading-icon" align="right">
+                <img
+                    src="{{ icon.src }}"
+                    alt="{{ icon.alt }}"
+                    width="72"
+                    height="72"
+                    class="email-icon"
+                >
+            </td>
+            {% endif %}
+        </tr>
+    </table>
 
     <hr class="email-divider">
 
