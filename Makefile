@@ -4,7 +4,7 @@ requirements:
 	uv lock --upgrade
 	uv export --format requirements-txt --no-hashes --no-dev --no-emit-project --output-file requirements.txt
 
-run:
+app:
 	@echo "Starting Wardrobe Shiny App..."
 	@if [ -d ".venv" ]; then \
 		. .venv/bin/activate; \
