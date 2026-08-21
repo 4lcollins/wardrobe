@@ -1,6 +1,7 @@
 from datetime import datetime, timezone
 
 from src.core.calendar import TimeOfDayPeriod
+from src.core.location import Location
 from src.core.thermometer import Thermometer
 
 
@@ -17,7 +18,8 @@ class TestGetPeriodTemperatures:
     def test_groups_temperatures_by_day_period(self, monkeypatch):
         monkeypatch.setattr("src.core.thermometer.SETTINGS.openweathermap_key", "test-key")
 
-        thermometer = Thermometer(city="Provo", state_abbr="UT", verbose=False)
+        location = Location(city="Provo", state_abbr="UT", verbose=False)
+        thermometer = Thermometer(location=location, verbose=False)
         timestamps = [
             int(datetime(2026, 6, 7, hour, tzinfo=timezone.utc).timestamp())
             for hour in [12, 13, 18, 23]

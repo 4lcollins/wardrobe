@@ -14,6 +14,7 @@ dependencies = [
   "google-genai",
   "bslib>=0.7",
   "pyyaml",
+  "supabase",
 ]
 
 [project.optional-dependencies]
