@@ -25,14 +25,25 @@ def header_ui(user: dict[str, Any] | None = None, module_id: str = "header"):
                     alt="Wardrobe",
                     class_="brand-logo",
                 ),
-                ui.h1(
-                    "Wardrobe",
-                    class_="hero-header",
+                ui.div(
+                    ui.h1(
+                        "Wardrobe",
+                        class_="hero-header",
+                    ),
+                    ui.p(
+                        "Your cozy outfit guide",
+                        class_="hero-kicker",
+                    ),
+                    class_="brand-copy",
                 ),
                 class_="brand-mark",
             ),
 
             ui.div(
+                ui.p(
+                    welcome_message(user),
+                    class_="sub-header",
+                ),
                 ui.div(
                     ui.input_dark_mode(
                         id=f"{module_id}_theme_mode",
@@ -42,22 +53,12 @@ def header_ui(user: dict[str, Any] | None = None, module_id: str = "header"):
                 ui.input_action_button(
                     "logout_btn",
                     "Sign Out",
-                    class_="btn btn-secondary btn-compact",
+                    class_="btn btn-muted btn-compact",
                 ),
                 class_="header-actions",
             ),
 
             class_="hero-top-row",
-        ),
-
-        ui.p(
-            "Your cozy outfit guide",
-            class_="hero-kicker",
-        ),
-
-        ui.p(
-            welcome_message(user),
-            class_="sub-header",
         ),
     )
 
