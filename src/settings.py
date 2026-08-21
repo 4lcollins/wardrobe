@@ -24,5 +24,4 @@ class Settings:
         self.supabase_url: str = os.getenv("SUPABASE_URL", "")
         self.supabase_key: str = os.getenv("SUPABASE_KEY", "")
 
-
 SETTINGS = Settings()

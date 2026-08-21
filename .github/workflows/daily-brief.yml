@@ -9,12 +9,8 @@ jobs:
   daily-brief:
     runs-on: ubuntu-latest
     env:
-      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-      GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
-      OPENWEATHERMAP_KEY: ${{ secrets.OPENWEATHERMAP_KEY }}
-      SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
-      SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      APP_ENV: prod
+      DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
     steps:
       - uses: actions/checkout@v4
 

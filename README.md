@@ -7,7 +7,7 @@ Wardrobe is a personal clothing management app that helps you organize, track, a
 Run the Shiny app locally from the project root:
 
 ```sh
-make run
+make app
 ```
 
 Shiny application code lives in `web/`, while backend logic and services live in `src/`.
@@ -31,33 +31,34 @@ Required runtime configuration is loaded from Doppler. Keep only bootstrap value
 - `APP_ENV`
 - `DOPPLER_TOKEN`
 
-Store application secrets in Doppler, including:
-
-- `GEMINI_API_KEY`
-- `GMAIL_APP_PASSWORD`
-- `OPENWEATHERMAP_KEY`
-- `SENDER_EMAIL`
-- `SUPABASE_KEY`
-- `SUPABASE_URL`
+Store application secrets in Doppler.
 
 ## Supabase
 
 Database schema changes live in `supabase/migrations/`.
 
-Install the Supabase CLI on macOS:
+Install the Supabase and Doppler CLIs on macOS:
 
 ```sh
 brew install supabase/tap/supabase
+brew install dopplerhq/cli/doppler
 supabase login
 ```
 
-Use separate Supabase projects for local development and production. Point local `.env` values at the development project, and keep production values in deployment secrets.
+Use separate Supabase projects for local development and production. Store environment-specific Supabase values in Doppler configs.
 
-Set `SUPABASE_PROJECT_REF` in `.env`, or pass `PROJECT_REF` directly. To apply pending migrations:
+To run database commands with values from Doppler:
 
 ```sh
-make supabase-plan
-make supabase-apply
+doppler run -- make supabase-plan
+doppler run -- make supabase-apply
+```
+
+To apply pending migrations without Doppler, pass `PROJECT_REF` directly:
+
+```sh
+make supabase-plan PROJECT_REF=<project-ref>
+make supabase-apply PROJECT_REF=<project-ref>
 ```
 
 Only use seed data for development or testing:
