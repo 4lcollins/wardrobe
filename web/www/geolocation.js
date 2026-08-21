@@ -1,4 +1,4 @@
-$(document).on('shiny:connected', function(event) {
+const setLocation = function() {
   Shiny.setInputValue('{{ input_id }}', null);
 
   if (navigator.geolocation) {
@@ -18,4 +18,10 @@ $(document).on('shiny:connected', function(event) {
   } else {
     Shiny.setInputValue('{{ input_id }}', { error: "Geolocation not supported" });
   }
-});
+};
+
+if (window.Shiny) {
+  setLocation();
+} else {
+  $(document).one('shiny:connected', setLocation);
+}

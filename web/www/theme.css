@@ -300,6 +300,29 @@ a:hover {
     width: 100%;
 }
 
+.brand-mark {
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+}
+
+.brand-logo {
+    width: 64px;
+    height: 64px;
+
+    object-fit: contain;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 12px;
+    flex-shrink: 0;
+}
+
 
 /* =========================================================
    6. THEME TOGGLE
@@ -629,8 +652,7 @@ a:hover {
     font-size: 15px;
 }
 
-.btn-primary,
-.game-button-primary {
+.btn-primary {
     background-color: #b56c46 !important;
     background-color: var(--color-primary) !important;
 
@@ -643,8 +665,7 @@ a:hover {
     box-shadow: 0 5px 0 var(--color-primary-shadow);
 }
 
-.btn-primary:hover,
-.game-button-primary:hover {
+.btn-primary:hover {
     background-color: #a45f3b !important;
     background-color: var(--color-primary-hover) !important;
 
@@ -656,8 +677,7 @@ a:hover {
     box-shadow: 0 6px 0 var(--color-primary-shadow);
 }
 
-.btn-primary:active,
-.game-button-primary:active {
+.btn-primary:active {
     transform: translateY(3px);
 
     box-shadow: 0 2px 0 #784227;
@@ -711,11 +731,6 @@ a:hover {
     align-items: stretch;
 }
 
-.control-panel,
-.result-panel {
-    height: 100%;
-}
-
 .helper-text {
     color: #a89985;
     color: var(--color-text-faint);
@@ -727,6 +742,125 @@ a:hover {
     margin-top: 14px;
 }
 
+.login-shell {
+    max-width: 720px;
+
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.login-hero {
+    position: relative;
+    text-align: center;
+
+    margin-bottom: 24px;
+}
+
+.login-theme-control {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+}
+
+.login-art-row {
+    display: flex;
+    align-items: end;
+    justify-content: center;
+
+    gap: 8px;
+    margin: 6px auto 12px;
+}
+
+.login-art-button {
+    display: inline-flex;
+    align-items: end;
+    justify-content: center;
+
+    width: 150px;
+    height: 124px;
+    min-width: 0;
+
+    padding: 0 !important;
+
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    cursor: pointer;
+}
+
+.login-art-button:hover {
+    transform: translateY(-8px);
+}
+
+.login-art-side-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 4px;
+}
+
+.login-art-arrow {
+    color: #fbf7ee;
+    color: var(--color-banner-text);
+
+    font-size: 34px;
+    font-weight: 800;
+    line-height: 1;
+
+    opacity: 0.82;
+}
+
+.login-art-item {
+    object-fit: contain;
+
+    filter: drop-shadow(0 6px 0 rgba(0, 0, 0, 0.12));
+}
+
+.login-art-side {
+    width: 112px;
+    height: 112px;
+
+    opacity: 0.92;
+}
+
+.login-art-feature {
+    width: 166px;
+    height: 152px;
+}
+
+.login-card-wrap {
+    max-width: 440px;
+    width: 100%;
+    margin: -8px auto 0;
+}
+
+.login-card {
+    text-align: center;
+}
+
+.login-card .form-group,
+.login-card .shiny-input-container {
+    max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.login-card .form-group {
+    margin-bottom: 18px;
+}
+
+.login-card .game-button {
+    max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.login-alert {
+    margin-bottom: 18px;
+}
 
 /* =========================================================
    12. EMPTY STATE
@@ -1209,6 +1343,11 @@ a:hover {
         padding: 18px 10px 32px;
     }
 
+    .login-shell {
+        min-height: auto;
+        justify-content: flex-start;
+    }
+
     .hero-panel {
         padding: 20px 18px;
         margin-bottom: 28px;
@@ -1218,8 +1357,42 @@ a:hover {
         align-items: flex-start;
     }
 
+    .header-actions {
+        gap: 8px;
+    }
+
     .hero-header {
         font-size: 2rem;
+    }
+
+    .login-theme-control {
+        position: static;
+        width: fit-content;
+
+        margin: 0 0 14px auto;
+    }
+
+    .login-art-row {
+        gap: 4px;
+    }
+
+    .login-art-button {
+        width: 96px;
+        height: 82px;
+    }
+
+    .login-art-arrow {
+        font-size: 24px;
+    }
+
+    .login-art-side {
+        width: 76px;
+        height: 76px;
+    }
+
+    .login-art-feature {
+        width: 120px;
+        height: 110px;
     }
 
     .location-section {
