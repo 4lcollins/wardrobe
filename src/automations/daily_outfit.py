@@ -28,7 +28,7 @@ def email_icon() -> dict[str, str]:
 def run():
     calendar = Calendar()
     location = Location(city="Provo", state_abbr="UT")
-    thermometer = Thermometer(verbose=True, location=location)
+    thermometer = Thermometer(location=location)
     stylist = Stylist(thermometer=thermometer)
 
     city = "Provo"

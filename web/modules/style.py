@@ -17,20 +17,15 @@ def style_ui():
 
                 ui.input_action_button(
                     "run_btn",
-                    "Style My Day",
+                    "Style My Outfit",
                     class_="btn btn-primary game-button w-100",
-                ),
-
-                ui.p(
-                    "Weather-aware styling for a comfortable, polished day.",
-                    class_="helper-text",
                 ),
             ),
         ),
 
         ui.div(
             ui.card(
-                ui.card_header("Today's Style"),
+                ui.card_header("Stylized Outfit"),
                 ui.output_ui("display_output"),
             ),
         ),
@@ -61,7 +56,6 @@ def style_server(
         calendar = Calendar()
         thermometer = Thermometer(
             location=location,
-            verbose=True,
         )
         stylist = Stylist(thermometer=thermometer)
 
@@ -78,11 +72,11 @@ def style_server(
         if input.run_btn() == 0:
             return ui.div(
                 ui.h4(
-                    "Ready to style your day",
+                    "Ready to style your day?",
                     class_="empty-state-title",
                 ),
                 ui.p(
-                    "Generate a recommendation to see today's weather and suggested outfits.",
+                    "Generate a recommendation to see suggested outfits for today's weather.",
                     class_="empty-state-copy",
                 ),
                 class_="empty-state",
@@ -121,30 +115,6 @@ def style_server(
         location_heading = data["heading"]
         periods = rec["time_periods"]
 
-        weather_tiles = [
-            ui.div(
-                ui.div(
-                    period["name"],
-                    class_="weather-label",
-                ),
-                ui.div(
-                    f"{period['temperature']}°",
-                    class_="weather-temperature",
-                ),
-                ui.div(
-                    "Feels like",
-                    class_="weather-caption",
-                ),
-                class_="weather-tile",
-            )
-            for period in periods
-        ]
-
-        weather_grid = ui.layout_columns(
-            *weather_tiles,
-            class_="weather-grid",
-        )
-
         outfit_cards = []
 
         for index, period in enumerate(periods):
@@ -158,9 +128,25 @@ def style_server(
 
             outfit_cards.append(
                 ui.div(
-                    ui.h4(
-                        f"{period['name']} Style",
-                        class_="outfit-title",
+                    ui.div(
+                        ui.h4(
+                            f"{period['display_date']} {period['name']}",
+                            class_="outfit-title",
+                        ),
+
+                        ui.div(
+                            ui.div(
+                                f"{period['temperature']}°",
+                                class_="outfit-temperature",
+                            ),
+                            ui.div(
+                                "Average feels like",
+                                class_="weather-caption",
+                            ),
+                            class_="outfit-weather",
+                        ),
+
+                        class_="outfit-header",
                     ),
 
                     ui.div(
@@ -209,18 +195,9 @@ def style_server(
             ),
 
             ui.p(
-                "Your weather-aware styling recommendation for today.",
+                "Your outfit recommendation, grounded in the forecast.",
                 class_="brief-subheading",
             ),
-
-            ui.div(
-                "Weather",
-                class_="section-title",
-            ),
-
-            weather_grid,
-
-            ui.hr(class_="game-divider"),
 
             ui.div(
                 "Recommended Styles",

@@ -36,24 +36,20 @@
 
     <hr class="email-divider">
 
-    <div class="section-title">🌤️ Weather Forecast</div>
-    <table class="weather-table">
-        <tbody>
-        {% for period in time_periods %}
-        <tr>
-            <td><strong>{{ period.name }}</strong></td>
-            <td align="right"><strong>{{ period.temperature }}°F</strong></td>
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <hr class="email-divider">
-
-    <div class="section-title">👕 Today's Outfits</div>
+    <div class="section-title">👕 Recommended Outfits</div>
     {% for period in time_periods %}
     <div class="outfit-box {% if loop.index == 1 %}morning{% else %}midday{% endif %}">
-        <div class="outfit-title">{{ period.name }} Outfit</div>
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+                <td>
+                    <div class="outfit-title">{{ period.display_date }} {{ period.name }} Outfit</div>
+                </td>
+                <td align="right">
+                    <div class="outfit-temperature">{{ period.temperature }}°F</div>
+                    <div class="weather-caption">Average feels like</div>
+                </td>
+            </tr>
+        </table>
         <div class="outfit-pieces">
             {{ period.num_clothing_pieces }} pieces
         </div>

@@ -1,15 +1,17 @@
 from datetime import datetime, timezone
 
-from src.core.calendar import TimeOfDayPeriod
 from src.core.location import Location
 from src.core.thermometer import Thermometer
 
 
-class TestTargetDatetime:
-    def test_uses_target_timezone_offset(self):
-        timestamp = int(datetime(2026, 6, 7, 12, tzinfo=timezone.utc).timestamp())
+class TestApplyTimezoneOffset:
+    def test_applies_timezone_offset(self):
+        utc_datetime = datetime(2026, 6, 7, 12, tzinfo=timezone.utc)
 
-        target_datetime = Thermometer._target_datetime(timestamp, -6 * 60 * 60)
+        target_datetime = Thermometer._apply_timezone_offset(
+            utc_datetime,
+            -6 * 60 * 60,
+        )
 
         assert target_datetime.hour == 6
 
@@ -19,7 +21,7 @@ class TestGetPeriodTemperatures:
         monkeypatch.setattr("src.core.thermometer.SETTINGS.openweathermap_key", "test-key")
 
         location = Location(city="Provo", state_abbr="UT", verbose=False)
-        thermometer = Thermometer(location=location, verbose=False)
+        thermometer = Thermometer(location=location)
         timestamps = [
             int(datetime(2026, 6, 7, hour, tzinfo=timezone.utc).timestamp())
             for hour in [12, 13, 18, 23]
@@ -37,19 +39,20 @@ class TestGetPeriodTemperatures:
                 ],
             },
         )
-        calendar = type(
-            "Calendar",
-            (),
-            {
-                "active_time_of_day_periods": [
-                    TimeOfDayPeriod("Morning", 6, 12),
-                    TimeOfDayPeriod("Afternoon", 12, 17),
-                    TimeOfDayPeriod("Evening", 17, 24),
-                ]
-            },
-        )()
+        monkeypatch.setattr(
+            "src.core.thermometer.datetime",
+            type(
+                "FixedDatetime",
+                (datetime,),
+                {
+                    "now": classmethod(
+                        lambda cls, tz=None: cls(2026, 6, 7, 12, tzinfo=tz)
+                    ),
+                },
+            ),
+        )
 
-        period_temperatures = thermometer.get_period_temperatures(calendar)
+        period_temperatures = thermometer.get_period_temperatures()
 
         assert [
             {
@@ -58,7 +61,7 @@ class TestGetPeriodTemperatures:
             }
             for item in period_temperatures
         ] == [
-            {"period": "Morning", "temperature": 45},
+            {"period": "Morning", "temperature": 50},
             {"period": "Afternoon", "temperature": 70},
             {"period": "Evening", "temperature": 60},
         ]

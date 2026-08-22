@@ -120,6 +120,7 @@ class Stylist:
         time_periods = [
             {
                 "name": period_temperature["period"].name,
+                "display_date": period_temperature["period"].display_date,
                 "temperature": period_temperature["temperature"],
                 "num_clothing_pieces": num_pieces,
                 "clothing_options": clothing_option,
@@ -157,8 +158,5 @@ class Stylist:
 
         return {
             "time_periods": time_periods,
-            "temperatures": temperatures,
-            "num_clothing_pieces": num_clothing_pieces,
-            "clothing_options": clothing_options,
             "insight": insight
         }

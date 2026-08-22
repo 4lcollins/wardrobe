@@ -1,3 +1,5 @@
+from datetime import datetime, timezone
+
 from src.core.calendar import Calendar, TimeOfDayPeriod
 
 
@@ -30,3 +32,69 @@ class TestCalendar:
             "Afternoon",
             "Evening",
         ]
+
+    def test_returns_remaining_periods_for_timezone_date(self):
+        calendar = Calendar()
+
+        periods = calendar.map_forecast_to_periods(
+            datetime(2026, 6, 7, 14, tzinfo=timezone.utc),
+            [
+                datetime(2026, 6, 7, 15, tzinfo=timezone.utc),
+                datetime(2026, 6, 7, 18, tzinfo=timezone.utc),
+                datetime(2026, 6, 8, 8, tzinfo=timezone.utc),
+            ],
+        )
+
+        assert [period.name for period in periods] == [
+            "Afternoon",
+            "Evening",
+            "Morning",
+        ]
+        assert [period.date.isoformat() for period in periods] == [
+            "2026-06-07",
+            "2026-06-07",
+            "2026-06-08",
+        ]
+        assert [period.display_date for period in periods] == [
+            "Today",
+            "Today",
+            "Tomorrow",
+        ]
+
+    def test_uses_tomorrow_periods_from_returned_forecast_hours(self):
+        calendar = Calendar()
+        calendar.time_of_day_periods = [
+            TimeOfDayPeriod("Morning", 7, 12),
+            TimeOfDayPeriod("Evening", 17, 22),
+        ]
+
+        periods = calendar.map_forecast_to_periods(
+            datetime(2026, 6, 7, 23, tzinfo=timezone.utc),
+            [
+                datetime(2026, 6, 8, 8, tzinfo=timezone.utc),
+                datetime(2026, 6, 8, 18, tzinfo=timezone.utc),
+            ],
+        )
+
+        assert [period.name for period in periods] == ["Morning", "Evening"]
+        assert [period.date.isoformat() for period in periods] == [
+            "2026-06-08",
+            "2026-06-08",
+        ]
+        assert [period.display_date for period in periods] == [
+            "Tomorrow",
+            "Tomorrow",
+        ]
+
+    def test_skips_periods_without_returned_forecast_hours(self):
+        calendar = Calendar()
+
+        periods = calendar.map_forecast_to_periods(
+            datetime(2026, 6, 7, 14, tzinfo=timezone.utc),
+            [
+                datetime(2026, 6, 8, 8, tzinfo=timezone.utc),
+            ],
+        )
+
+        assert [period.name for period in periods] == ["Morning"]
+        assert [period.display_date for period in periods] == ["Tomorrow"]
