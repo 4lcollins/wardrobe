@@ -217,8 +217,7 @@ a:hover {
 }
 
 .hero-kicker {
-    color: #9c6b43 !important;
-    color: var(--color-accent) !important;
+    color: #d0a078 !important;
 
     font-size: 13px;
     font-weight: 800;
@@ -241,8 +240,7 @@ a:hover {
 }
 
 .section-title {
-    color: #9c6b43;
-    color: var(--color-accent);
+    color: #d0a078;
 
     font-size: 12px;
     font-weight: 900;
@@ -1052,71 +1050,8 @@ html.shiny-busy::before {
 
 
 /* =========================================================
-   15. WEATHER
+   15. WEATHER METADATA
    ========================================================= */
-
-.weather-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.weather-table td {
-    color: #4a3e35;
-    color: var(--color-text);
-
-    font-size: 15px;
-
-    padding: 10px 12px;
-}
-
-.weather-table tr:nth-child(even) {
-    background-color: #f5ecd8;
-    background-color: var(--color-surface-alt);
-}
-
-.weather-tile {
-    background-color: #f5ecd8;
-    background-color: var(--color-surface-alt);
-
-    text-align: center;
-
-    border: 2px solid #e5d4bc;
-    border-color: var(--color-border);
-
-    border-radius: 14px;
-    border-radius: var(--radius-lg);
-
-    padding: 14px 10px;
-}
-
-.weather-label {
-    color: #8c7a6b;
-    color: var(--color-text-muted);
-
-    font-size: 12px;
-    font-weight: 800;
-
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-.weather-temperature {
-    color: #3b2f27;
-    color: var(--color-text-strong);
-
-    font-family:
-        "Playfair Display",
-        Georgia,
-        serif;
-    font-family: var(--font-heading);
-
-    font-size: 2rem;
-    font-weight: 700;
-
-    line-height: 1.1;
-
-    margin: 4px 0;
-}
 
 .weather-caption {
     color: #a89985;
@@ -1176,6 +1111,32 @@ html.shiny-busy::before {
     font-weight: 700;
 
     margin: 0 0 6px;
+}
+
+.outfit-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    align-items: flex-start;
+}
+
+.outfit-weather {
+    text-align: right;
+    flex: 0 0 auto;
+}
+
+.outfit-temperature {
+    color: #d0a078;
+
+    font-family:
+        "Playfair Display",
+        Georgia,
+        serif;
+    font-family: var(--font-heading);
+
+    font-size: 1.45rem;
+    font-weight: 700;
+    line-height: 1;
 }
 
 .outfit-pieces {
@@ -1409,18 +1370,6 @@ html.shiny-busy::before {
 
     .email-divider {
         border-top-color: #796556 !important;
-    }
-
-    .section-title {
-        color: #d0a078 !important;
-    }
-
-    .weather-table td {
-        color: #e7ddd4 !important;
-    }
-
-    .weather-table tr:nth-child(even) {
-        background-color: #51443a !important;
     }
 
     .outfit-box {
