@@ -40,55 +40,11 @@ class FakeSupabase:
         return self.query
 
 
-def test_list_user_emails(monkeypatch):
-    fake_client = FakeSupabase(
-        [
-            {
-                "id": "44ef5b7e-e665-4d3c-b956-6ccecbdf7e5c",
-                "created_at": "2026-08-21T00:00:00+00:00",
-                "email": "one@example.com",
-                "first_name": "One",
-                "last_name": "User",
-                "is_email_enabled": True,
-            },
-            {
-                "id": "6070af8a-0aa7-4e06-bfc6-9292d6e72d76",
-                "created_at": "2026-08-21T00:00:00+00:00",
-                "email": "two@example.com",
-                "first_name": "Two",
-                "last_name": "User",
-                "is_email_enabled": True,
-            },
-        ]
-    )
-    monkeypatch.setattr(users, "get_supabase", lambda: fake_client)
-
-    assert users.list_user_emails() == ["one@example.com", "two@example.com"]
-
-
-def test_list_user_emails_skips_missing_email(monkeypatch):
-    fake_client = FakeSupabase(
-        [
-            {
-                "id": "44ef5b7e-e665-4d3c-b956-6ccecbdf7e5c",
-                "created_at": "2026-08-21T00:00:00+00:00",
-                "email": "",
-                "first_name": "No",
-                "last_name": "Email",
-                "is_email_enabled": True,
-            }
-        ]
-    )
-    monkeypatch.setattr(users, "get_supabase", lambda: fake_client)
-
-    assert users.list_user_emails() == []
-
-
-def test_list_active_users_filters_email_enabled(monkeypatch):
+def test_list_email_enabled_users_filters_email_enabled(monkeypatch):
     fake_client = FakeSupabase([])
     monkeypatch.setattr(users, "get_supabase", lambda: fake_client)
 
-    users.list_active_users()
+    users.list_email_enabled_users()
 
     assert fake_client.table_name == "user"
     assert fake_client.query.filters == [("is_email_enabled", True)]

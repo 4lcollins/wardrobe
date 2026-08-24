@@ -7,7 +7,7 @@ from src.core import (
     Stylist,
     Thermometer,
     )
-from src.db.users import list_user_emails
+from src.db.users import list_email_enabled_users
 from src.utils.email import send_email
 from src.utils.template import render_template
 
@@ -26,6 +26,10 @@ def email_icon() -> dict[str, str]:
 
 
 def run():
+    users = [user for user in list_email_enabled_users() if user.get("email")]
+    if not users:
+        return
+
     calendar = Calendar()
     location = Location(city="Provo", state_abbr="UT")
     thermometer = Thermometer(location=location)
@@ -46,8 +50,9 @@ def run():
         insight=recommendation["insight"],
     )
 
-    send_email(
-        subject="Your Daily Outfit",
-        body=message,
-        bcc_emails=list_user_emails(),
-    )
+    for user in users:
+        send_email(
+            subject="Your Daily Outfit",
+            body=message,
+            receiver_email=user["email"],
+        )
