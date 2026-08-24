@@ -7,7 +7,7 @@ from src.core import (
     Stylist,
     Thermometer,
     )
-from src.db.users import list_active_users
+from src.db.users import list_email_enabled_users
 from src.utils.email import send_email
 from src.utils.template import render_template
 
@@ -26,7 +26,7 @@ def email_icon() -> dict[str, str]:
 
 
 def run():
-    users = [user for user in list_active_users() if user.get("email")]
+    users = [user for user in list_email_enabled_users() if user.get("email")]
     if not users:
         return
 
