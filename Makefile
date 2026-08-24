@@ -1,6 +1,7 @@
 -include .env
 
 PROJECT_REF ?= $(SUPABASE_PROJECT_REF)
+DOPPLER ?= doppler run --
 
 .PHONY: automation requirements app supabase-plan supabase-apply supabase-reset
 
@@ -23,32 +24,29 @@ automation:
 	python -m src.automations.runner daily_outfit
 
 supabase-plan:
-	@if [ -z "$(PROJECT_REF)" ]; then \
-		echo "Usage: make supabase-plan PROJECT_REF=<project-ref>"; \
-		echo "Or set SUPABASE_PROJECT_REF in .env"; \
+	@$(DOPPLER) sh -c 'PROJECT_REF="$(PROJECT_REF)"; PROJECT_REF="$${PROJECT_REF:-$$SUPABASE_PROJECT_REF}"; if [ -z "$$PROJECT_REF" ]; then \
+		echo "Set SUPABASE_PROJECT_REF in Doppler or run make supabase-plan PROJECT_REF=<project-ref>"; \
 		exit 1; \
-	fi
-	supabase link --project-ref $(PROJECT_REF)
-	supabase db push --dry-run
+	fi; \
+	supabase link --project-ref "$$PROJECT_REF"; \
+	supabase db push --dry-run'
 
 supabase-apply:
-	@if [ -z "$(PROJECT_REF)" ]; then \
-		echo "Usage: make supabase-apply PROJECT_REF=<project-ref> [SEED=1]"; \
-		echo "Or set SUPABASE_PROJECT_REF in .env"; \
+	@$(DOPPLER) sh -c 'PROJECT_REF="$(PROJECT_REF)"; PROJECT_REF="$${PROJECT_REF:-$$SUPABASE_PROJECT_REF}"; if [ -z "$$PROJECT_REF" ]; then \
+		echo "Set SUPABASE_PROJECT_REF in Doppler or run make supabase-apply PROJECT_REF=<project-ref> [SEED=1]"; \
 		exit 1; \
-	fi
-	supabase link --project-ref $(PROJECT_REF)
-	@if [ "$(SEED)" = "1" ]; then \
+	fi; \
+	supabase link --project-ref "$$PROJECT_REF"; \
+	if [ "$(SEED)" = "1" ]; then \
 		supabase db push --include-seed; \
 	else \
 		supabase db push; \
-	fi
+	fi'
 
 supabase-reset:
-	@if [ -z "$(PROJECT_REF)" ]; then \
-		echo "Usage: make supabase-reset PROJECT_REF=<project-ref>"; \
-		echo "Or set SUPABASE_PROJECT_REF in .env"; \
+	@$(DOPPLER) sh -c 'PROJECT_REF="$(PROJECT_REF)"; PROJECT_REF="$${PROJECT_REF:-$$SUPABASE_PROJECT_REF}"; if [ -z "$$PROJECT_REF" ]; then \
+		echo "Set SUPABASE_PROJECT_REF in Doppler or run make supabase-reset PROJECT_REF=<project-ref>"; \
 		exit 1; \
-	fi
-	supabase link --project-ref $(PROJECT_REF)
-	supabase db reset --linked
+	fi; \
+	supabase link --project-ref "$$PROJECT_REF"; \
+	supabase db reset --linked'
