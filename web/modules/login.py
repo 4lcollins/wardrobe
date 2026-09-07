@@ -1,6 +1,10 @@
 from shiny import module, reactive, render, ui
 
-from src.db.users import get_user_by_email
+from src.db.users import (
+    DuplicateUserError,
+    create_user_account,
+    get_user_by_email,
+)
 
 
 LOGIN_ART = [
@@ -28,9 +32,10 @@ LOGIN_ART = [
 
 
 class LoginState:
-    def __init__(self, current_user, login_error_message):
+    def __init__(self, current_user, login_error_message, account_mode):
         self.current_user = current_user
         self.login_error_message = login_error_message
+        self.account_mode = account_mode
 
     def get_user(self):
         return self.current_user.get()
@@ -38,6 +43,7 @@ class LoginState:
     def clear(self):
         self.current_user.set(None)
         self.login_error_message.set(None)
+        self.account_mode.set("login")
 
 
 @module.ui
@@ -63,21 +69,7 @@ def login_ui():
         ),
         ui.div(
             ui.div(
-                ui.h2(
-                    "Login",
-                    class_="panel-title",
-                ),
-                ui.output_ui("login_error"),
-                ui.input_text(
-                    "login_email",
-                    "Email",
-                    placeholder="you@example.com",
-                ),
-                ui.input_action_button(
-                    "login_btn",
-                    "Sign In",
-                    class_="btn btn-primary game-button w-100",
-                ),
+                ui.output_ui("account_form"),
                 class_="login-card game-panel",
             ),
             class_="login-card-wrap",
@@ -90,6 +82,7 @@ def login_ui():
 def login_server(input, output, session):
     current_user = reactive.Value(None)
     login_error_message = reactive.Value(None)
+    account_mode = reactive.Value("login")
     art_index = reactive.Value(1)
 
     def _shift_art(offset: int):
@@ -110,6 +103,10 @@ def login_server(input, output, session):
     def _handle_login():
         email = input.login_email()
 
+        if not email.strip():
+            login_error_message.set("Email is required")
+            return
+
         try:
             user = get_user_by_email(email)
         except Exception:
@@ -122,6 +119,141 @@ def login_server(input, output, session):
 
         current_user.set(user)
         login_error_message.set(None)
+
+    @reactive.effect
+    @reactive.event(input.show_create_account_btn)
+    def _show_create_account():
+        account_mode.set("create")
+        login_error_message.set(None)
+
+    @reactive.effect
+    @reactive.event(input.show_login_btn)
+    def _show_login():
+        account_mode.set("login")
+        login_error_message.set(None)
+
+    @reactive.effect
+    @reactive.event(input.create_account_btn)
+    def _handle_create_account():
+        email = input.create_email()
+        first_name = input.create_first_name()
+        last_name = input.create_last_name()
+        is_email_enabled = input.create_is_email_enabled()
+
+        if not email.strip():
+            login_error_message.set("Email is required")
+            return
+
+        if not first_name.strip():
+            login_error_message.set("First name is required")
+            return
+
+        if not last_name.strip():
+            login_error_message.set("Last name is required")
+            return
+
+        if is_email_enabled is None:
+            login_error_message.set("Choose an email setting")
+            return
+
+        try:
+            user = create_user_account(
+                email=email,
+                first_name=first_name,
+                last_name=last_name,
+                is_email_enabled=is_email_enabled,
+            )
+        except DuplicateUserError:
+            login_error_message.set("That email already has a Wardrobe account.")
+            return
+        except Exception:
+            login_error_message.set("Account creation is temporarily unavailable. Try again soon.")
+            return
+
+        current_user.set(user)
+        login_error_message.set(None)
+
+    @output
+    @render.ui
+    def account_form():
+        if account_mode.get() == "create":
+            return ui.div(
+                ui.div(
+                    ui.h2(
+                        "Create account",
+                        class_="panel-title",
+                    ),
+                    ui.span("Required Fields", class_="login-form-pill"),
+                    class_="login-form-heading",
+                ),
+                ui.output_ui("login_error"),
+                ui.div(
+                    ui.input_text(
+                        "create_email",
+                        "Email",
+                        placeholder="you@example.com",
+                    ),
+                    ui.div(
+                        ui.input_text(
+                            "create_first_name",
+                            "First name",
+                            placeholder="Jane",
+                        ),
+                        ui.input_text(
+                            "create_last_name",
+                            "Last name",
+                            placeholder="Doe",
+                        ),
+                        class_="login-name-grid",
+                    ),
+                    class_="login-form-fields",
+                ),
+                ui.div(
+                    ui.div(
+                        ui.strong("Daily outfit emails"),
+                        class_="login-preference-copy",
+                    ),
+                    ui.input_checkbox(
+                        "create_is_email_enabled",
+                        "Enabled",
+                        value=True,
+                    ),
+                    class_="login-preference-row",
+                ),
+                ui.input_action_button(
+                    "create_account_btn",
+                    "Create Account",
+                    class_="btn btn-primary game-button w-100",
+                ),
+                ui.input_action_button(
+                    "show_login_btn",
+                    "Back to sign in",
+                    class_="btn btn-link login-link-button",
+                ),
+            )
+
+        return ui.div(
+            ui.h2(
+                "Login",
+                class_="panel-title",
+            ),
+            ui.output_ui("login_error"),
+            ui.input_text(
+                "login_email",
+                "Email",
+                placeholder="you@example.com",
+            ),
+            ui.input_action_button(
+                "login_btn",
+                "Sign In",
+                class_="btn btn-primary game-button w-100",
+            ),
+            ui.input_action_button(
+                "show_create_account_btn",
+                "Create an account",
+                class_="btn btn-link login-link-button",
+            ),
+        )
 
     @output
     @render.ui
@@ -176,4 +308,4 @@ def login_server(input, output, session):
             class_="login-art-row",
         )
 
-    return LoginState(current_user, login_error_message)
+    return LoginState(current_user, login_error_message, account_mode)
