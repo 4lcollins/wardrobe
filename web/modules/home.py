@@ -73,10 +73,10 @@ def home_ui(user: dict[str, Any] | None = None):
             ),
             ui.navset_pill(
                 ui.nav_panel(
-                    "Outfit",
+                    "Style",
                     location_ui("location"),
                     style_ui("style"),
-                    value="outfit",
+                    value="style",
                 ),
                 ui.nav_panel(
                     "Settings",
@@ -84,7 +84,7 @@ def home_ui(user: dict[str, Any] | None = None):
                     value="settings",
                 ),
                 id="main_nav",
-                selected="outfit",
+                selected="style",
             ),
             class_="app-shell",
         )

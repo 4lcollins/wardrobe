@@ -40,9 +40,6 @@ class LoginState:
     def get_user(self):
         return self.current_user.get()
 
-    def set_user(self, user):
-        self.current_user.set(user)
-
     def clear(self):
         self.current_user.set(None)
         self.login_error_message.set(None)

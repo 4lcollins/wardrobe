@@ -19,7 +19,6 @@ def app_server(input, output, session):
     settings_server(
         "settings",
         get_user=login_state.get_user,
-        set_user=login_state.set_user,
     )
 
     @reactive.effect
