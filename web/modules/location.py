@@ -21,17 +21,24 @@ def location_ui():
 
         ui.div(
             ui.output_ui("location_status"),
-            ui.input_action_button(
-                "edit_location_btn",
-                "✏️ Edit",
-                class_="btn btn-secondary btn-compact",
-            ),
             class_="location-hud",
         ),
 
         ui.output_ui("location_editor_panel"),
 
         class_="location-section",
+    )
+
+
+def _location_status_button(text: str, status_class: str):
+    return ui.input_action_button(
+        "edit_location_btn",
+        ui.span(
+            ui.span("🌎", class_="status-icon"),
+            ui.span(text),
+            class_="location-status-content",
+        ),
+        class_=f"location-status location-status-button {status_class}",
     )
 
 
@@ -143,24 +150,15 @@ def location_server(input, output, session):
         status = state_info["status"]
 
         if status == "loading":
-            return ui.div(
-                ui.span("🌎", class_="status-icon"),
-                ui.span("Finding your location…"),
-                class_="location-status status-loading",
-            )
+            return _location_status_button("Finding your location…", "status-loading")
 
         if status == "success":
-            return ui.div(
-                ui.span("🌎", class_="status-icon"),
-                ui.span(state_info["display"]),
-                class_="location-status status-success",
+            return _location_status_button(
+                state_info["display"],
+                "status-success",
             )
 
-        return ui.div(
-            ui.span("🌎", class_="status-icon"),
-            ui.span("Location needed"),
-            class_="location-status status-required",
-        )
+        return _location_status_button("Location needed", "status-required")
 
     @output
     @render.ui

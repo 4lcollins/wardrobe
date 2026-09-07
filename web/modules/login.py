@@ -180,7 +180,7 @@ def login_server(input, output, session):
             return ui.div(
                 ui.div(
                     ui.h2(
-                        "Create account",
+                        "Create Account",
                         class_="panel-title",
                     ),
                     ui.span("Required Fields", class_="login-form-pill"),

@@ -3,6 +3,8 @@
    Shared across Shiny + Email
    ========================================================= */
 
+@import url("https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@600;700;800;900&display=swap");
+
 
 /* =========================================================
    1. LIGHT THEME + DESIGN TOKENS
@@ -52,9 +54,9 @@
         sans-serif;
 
     --font-heading:
-        "Playfair Display",
-        Georgia,
-        serif;
+        "Azeret Mono",
+        "Inter",
+        monospace;
 
     /* Shape */
     --radius-sm: 8px;
@@ -211,7 +213,7 @@ a:hover {
 
     font-size: clamp(2.1rem, 5vw, 2.8rem);
     font-weight: 700;
-    letter-spacing: -0.5px;
+    letter-spacing: 0;
     line-height: 1.05;
     margin: 0;
 }
@@ -219,9 +221,10 @@ a:hover {
 .hero-kicker {
     color: #d0a078 !important;
 
+    font-family: var(--font-heading);
     font-size: 13px;
     font-weight: 800;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
 
     margin: 8px 0 0;
@@ -242,9 +245,10 @@ a:hover {
 .section-title {
     color: #d0a078;
 
+    font-family: var(--font-heading);
     font-size: 12px;
-    font-weight: 900;
-    letter-spacing: 0.08em;
+    font-weight: 800;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
 
     margin: 0 0 12px;
@@ -335,6 +339,7 @@ a:hover {
 .header-actions .sub-header {
     margin: 0;
     white-space: nowrap;
+    font-family: var(--font-heading);
     font-weight: 800;
 }
 
@@ -456,8 +461,30 @@ a:hover {
     border-radius: 50rem;
     border-radius: var(--radius-pill);
 
+    font-family: var(--font-heading);
     font-size: 14px;
     font-weight: 700;
+}
+
+.location-status-button {
+    cursor: pointer;
+    box-shadow: none !important;
+}
+
+.location-status-button:hover,
+.location-status-button:focus {
+    filter: brightness(1.04);
+    transform: translateY(-1px);
+}
+
+.location-status-button:active {
+    transform: translateY(1px);
+}
+
+.location-status-content {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .status-loading {
@@ -511,6 +538,7 @@ a:hover {
     padding: 10px 12px;
     margin-bottom: 16px;
 
+    font-family: var(--font-heading);
     font-size: 13px;
     font-weight: 700;
 }
@@ -593,12 +621,15 @@ a:hover {
    9. FORMS
    ========================================================= */
 
-.form-label {
+label,
+.form-label,
+.control-label {
     color: #3b2f27 !important;
     color: var(--color-text-strong) !important;
 
+    font-family: var(--font-heading);
     font-size: 13px;
-    font-weight: 800;
+    font-weight: 700;
 }
 
 .form-control,
@@ -652,8 +683,9 @@ a:hover {
     border-radius: 12px !important;
     border-radius: var(--radius-md) !important;
 
-    font-weight: 800;
-    letter-spacing: 0.01em;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    letter-spacing: 0;
 
     transition:
         transform 0.08s ease,
@@ -697,6 +729,49 @@ a:hover {
 
     box-shadow: 0 2px 0 #784227;
     box-shadow: 0 2px 0 var(--color-primary-shadow);
+}
+
+.main-tabs {
+    margin-top: -12px;
+}
+
+.main-tabs > .nav-pills {
+    display: flex;
+    gap: 0;
+    width: 100%;
+    padding: 6px;
+    margin: 0 0 18px !important;
+
+    background-color: var(--color-surface-alt);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-md);
+}
+
+.main-tabs > .nav-pills .nav-item {
+    flex: 1 1 0;
+}
+
+.main-tabs > .nav-pills .nav-link {
+    width: 100%;
+    color: var(--color-text-strong) !important;
+    background-color: transparent !important;
+    border: 0 !important;
+    border-radius: calc(var(--radius-md) - 4px) !important;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    text-align: center;
+}
+
+.main-tabs > .nav-pills .nav-link:hover,
+.main-tabs > .nav-pills .nav-link:focus {
+    color: var(--color-primary-dark) !important;
+    background-color: color-mix(in srgb, var(--color-surface) 62%, transparent) !important;
+}
+
+.main-tabs > .nav-pills .nav-link.active {
+    color: var(--color-text-strong) !important;
+    background-color: var(--color-surface) !important;
+    box-shadow: 0 2px 8px rgba(74, 62, 53, 0.08);
 }
 
 .btn-secondary {
@@ -911,6 +986,7 @@ a:hover {
     border: 1px solid var(--color-border);
     border-radius: var(--radius-sm);
 
+    font-family: var(--font-heading);
     font-size: 0.72rem;
     font-weight: 800;
     text-transform: uppercase;
@@ -978,6 +1054,7 @@ a:hover {
 
 .login-preference-copy strong {
     color: var(--color-text-strong);
+    font-family: var(--font-heading);
     font-size: 0.95rem;
 }
 
@@ -1028,6 +1105,86 @@ a:hover {
 
 .login-alert {
     margin-bottom: 18px;
+}
+
+.settings-wrap {
+    max-width: 520px;
+    margin: 0 auto;
+}
+
+.settings-card {
+    text-align: left;
+}
+
+.settings-name-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.settings-name-grid .shiny-input-container {
+    width: 100%;
+}
+
+.settings-readonly-field {
+    display: grid;
+    gap: 6px;
+    margin-bottom: 18px;
+}
+
+.settings-readonly-label {
+    color: var(--color-text-strong);
+    font-family: var(--font-heading);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.settings-readonly-value {
+    min-height: 46px;
+    padding: 10px 12px;
+
+    color: var(--color-text-muted);
+    background-color: var(--color-surface-alt);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-md);
+
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+}
+
+.settings-preference-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 0 0 18px;
+    padding: 14px 0;
+
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.settings-preference-row strong {
+    color: var(--color-text-strong);
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+}
+
+.settings-preference-row .shiny-input-container,
+.settings-preference-row .form-group {
+    width: auto;
+    min-width: 86px;
+    margin: 0;
+}
+
+.settings-alert {
+    margin-bottom: 18px;
+}
+
+.settings-alert-success {
+    color: var(--color-secondary-dark);
+    background-color: color-mix(in srgb, var(--color-secondary) 14%, var(--color-surface));
+    border-color: var(--color-secondary);
 }
 
 
@@ -1170,6 +1327,7 @@ html.shiny-busy::before {
     color: #a89985;
     color: var(--color-text-faint);
 
+    font-family: var(--font-heading);
     font-size: 11px;
 }
 
@@ -1256,6 +1414,7 @@ html.shiny-busy::before {
     color: #8c7a6b;
     color: var(--color-text-muted);
 
+    font-family: var(--font-heading);
     font-size: 13px;
     font-weight: 600;
 
@@ -1302,6 +1461,7 @@ html.shiny-busy::before {
     color: #9c6b43;
     color: var(--color-accent);
 
+    font-family: var(--font-heading);
     font-size: 15px;
     font-weight: 800;
 
@@ -1611,6 +1771,11 @@ html.shiny-busy::before {
     }
 
     .login-name-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .settings-name-grid {
         grid-template-columns: 1fr;
         gap: 0;
     }
