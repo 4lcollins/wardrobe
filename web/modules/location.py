@@ -21,11 +21,6 @@ def location_ui():
 
         ui.div(
             ui.output_ui("location_status"),
-            ui.input_action_button(
-                "edit_location_btn",
-                "✏️ Edit",
-                class_="btn btn-secondary btn-compact",
-            ),
             class_="location-hud",
         ),
 
@@ -143,23 +138,35 @@ def location_server(input, output, session):
         status = state_info["status"]
 
         if status == "loading":
-            return ui.div(
-                ui.span("🌎", class_="status-icon"),
-                ui.span("Finding your location…"),
-                class_="location-status status-loading",
+            return ui.input_action_button(
+                "edit_location_btn",
+                ui.span(
+                    ui.span("🌎", class_="status-icon"),
+                    ui.span("Finding your location…"),
+                    class_="location-status-content",
+                ),
+                class_="location-status location-status-button status-loading",
             )
 
         if status == "success":
-            return ui.div(
-                ui.span("🌎", class_="status-icon"),
-                ui.span(state_info["display"]),
-                class_="location-status status-success",
+            return ui.input_action_button(
+                "edit_location_btn",
+                ui.span(
+                    ui.span("🌎", class_="status-icon"),
+                    ui.span(state_info["display"]),
+                    class_="location-status-content",
+                ),
+                class_="location-status location-status-button status-success",
             )
 
-        return ui.div(
-            ui.span("🌎", class_="status-icon"),
-            ui.span("Location needed"),
-            class_="location-status status-required",
+        return ui.input_action_button(
+            "edit_location_btn",
+            ui.span(
+                ui.span("🌎", class_="status-icon"),
+                ui.span("Location needed"),
+                class_="location-status-content",
+            ),
+            class_="location-status location-status-button status-required",
         )
 
     @output

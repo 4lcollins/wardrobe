@@ -247,8 +247,8 @@ a:hover {
 
     font-family: var(--font-heading);
     font-size: 12px;
-    font-weight: 900;
-    letter-spacing: 0;
+    font-weight: 800;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
 
     margin: 0 0 12px;
@@ -464,6 +464,27 @@ a:hover {
     font-family: var(--font-heading);
     font-size: 14px;
     font-weight: 700;
+}
+
+.location-status-button {
+    cursor: pointer;
+    box-shadow: none !important;
+}
+
+.location-status-button:hover,
+.location-status-button:focus {
+    filter: brightness(1.04);
+    transform: translateY(-1px);
+}
+
+.location-status-button:active {
+    transform: translateY(1px);
+}
+
+.location-status-content {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .status-loading {
