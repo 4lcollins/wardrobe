@@ -69,22 +69,25 @@ def home_ui(user: dict[str, Any] | None = None):
         ui.div(
             ui.div(
                 header_ui(user=user),
+                location_ui("location"),
                 class_="hero-panel",
             ),
-            ui.navset_pill(
-                ui.nav_panel(
-                    "Style",
-                    location_ui("location"),
-                    style_ui("style"),
-                    value="style",
+            ui.div(
+                ui.navset_pill(
+                    ui.nav_panel(
+                        "Style",
+                        style_ui("style"),
+                        value="style",
+                    ),
+                    ui.nav_panel(
+                        "Settings",
+                        settings_ui("settings", user=user),
+                        value="settings",
+                    ),
+                    id="main_nav",
+                    selected="style",
                 ),
-                ui.nav_panel(
-                    "Settings",
-                    settings_ui("settings", user=user),
-                    value="settings",
-                ),
-                id="main_nav",
-                selected="style",
+                class_="main-tabs",
             ),
             class_="app-shell",
         )
