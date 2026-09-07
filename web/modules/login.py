@@ -32,9 +32,10 @@ LOGIN_ART = [
 
 
 class LoginState:
-    def __init__(self, current_user, login_error_message):
+    def __init__(self, current_user, login_error_message, account_mode):
         self.current_user = current_user
         self.login_error_message = login_error_message
+        self.account_mode = account_mode
 
     def get_user(self):
         return self.current_user.get()
@@ -42,6 +43,7 @@ class LoginState:
     def clear(self):
         self.current_user.set(None)
         self.login_error_message.set(None)
+        self.account_mode.set("login")
 
 
 @module.ui
@@ -306,4 +308,4 @@ def login_server(input, output, session):
             class_="login-art-row",
         )
 
-    return LoginState(current_user, login_error_message)
+    return LoginState(current_user, login_error_message, account_mode)
