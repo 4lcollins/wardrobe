@@ -13,6 +13,15 @@ def normalize_email(email: str) -> str:
     return email.strip().lower()
 
 
+def _required_text(value: str, field_name: str) -> str:
+    normalized_value = value.strip()
+
+    if not normalized_value:
+        raise ValueError(f"{field_name} is required.")
+
+    return normalized_value
+
+
 def list_email_enabled_users() -> list[dict[str, Any]]:
     response = (
         get_supabase()
@@ -56,14 +65,8 @@ def create_user_account(
     if not normalized_email:
         raise ValueError("Email is required.")
 
-    normalized_first_name = first_name.strip()
-    normalized_last_name = last_name.strip()
-
-    if not normalized_first_name:
-        raise ValueError("First name is required.")
-
-    if not normalized_last_name:
-        raise ValueError("Last name is required.")
+    normalized_first_name = _required_text(first_name, "First name")
+    normalized_last_name = _required_text(last_name, "Last name")
 
     if get_user_by_email(normalized_email):
         raise DuplicateUserError("A Wardrobe account already exists for this email.")
@@ -94,14 +97,8 @@ def update_user_profile(
     last_name: str,
     is_email_enabled: bool,
 ) -> dict[str, Any]:
-    normalized_first_name = first_name.strip()
-    normalized_last_name = last_name.strip()
-
-    if not normalized_first_name:
-        raise ValueError("First name is required.")
-
-    if not normalized_last_name:
-        raise ValueError("Last name is required.")
+    normalized_first_name = _required_text(first_name, "First name")
+    normalized_last_name = _required_text(last_name, "Last name")
 
     profile = {
         "first_name": normalized_first_name,

@@ -30,6 +30,18 @@ def location_ui():
     )
 
 
+def _location_status_button(text: str, status_class: str):
+    return ui.input_action_button(
+        "edit_location_btn",
+        ui.span(
+            ui.span("🌎", class_="status-icon"),
+            ui.span(text),
+            class_="location-status-content",
+        ),
+        class_=f"location-status location-status-button {status_class}",
+    )
+
+
 @module.server
 def location_server(input, output, session):
     is_editing = reactive.Value(False)
@@ -138,36 +150,15 @@ def location_server(input, output, session):
         status = state_info["status"]
 
         if status == "loading":
-            return ui.input_action_button(
-                "edit_location_btn",
-                ui.span(
-                    ui.span("🌎", class_="status-icon"),
-                    ui.span("Finding your location…"),
-                    class_="location-status-content",
-                ),
-                class_="location-status location-status-button status-loading",
-            )
+            return _location_status_button("Finding your location…", "status-loading")
 
         if status == "success":
-            return ui.input_action_button(
-                "edit_location_btn",
-                ui.span(
-                    ui.span("🌎", class_="status-icon"),
-                    ui.span(state_info["display"]),
-                    class_="location-status-content",
-                ),
-                class_="location-status location-status-button status-success",
+            return _location_status_button(
+                state_info["display"],
+                "status-success",
             )
 
-        return ui.input_action_button(
-            "edit_location_btn",
-            ui.span(
-                ui.span("🌎", class_="status-icon"),
-                ui.span("Location needed"),
-                class_="location-status-content",
-            ),
-            class_="location-status location-status-button status-required",
-        )
+        return _location_status_button("Location needed", "status-required")
 
     @output
     @render.ui
