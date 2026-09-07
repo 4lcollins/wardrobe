@@ -3,7 +3,7 @@ name: Your Daily Outfit
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 13 * * *"
+    - cron: "0 10 * * *"
 
 jobs:
   daily-brief:
