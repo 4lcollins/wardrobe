@@ -85,3 +85,37 @@ def create_user_account(
 
     data = response.data or []
     return data[0] if data else profile
+
+
+def update_user_profile(
+    *,
+    user_id: str,
+    first_name: str,
+    last_name: str,
+    is_email_enabled: bool,
+) -> dict[str, Any]:
+    normalized_first_name = first_name.strip()
+    normalized_last_name = last_name.strip()
+
+    if not normalized_first_name:
+        raise ValueError("First name is required.")
+
+    if not normalized_last_name:
+        raise ValueError("Last name is required.")
+
+    profile = {
+        "first_name": normalized_first_name,
+        "last_name": normalized_last_name,
+        "is_email_enabled": is_email_enabled,
+    }
+
+    response = (
+        get_supabase()
+        .table("user")
+        .update(profile)
+        .eq("id", user_id)
+        .execute()
+    )
+
+    data = response.data or []
+    return data[0] if data else {**profile, "id": user_id}
