@@ -4,6 +4,7 @@ from shiny import ui
 
 from web.modules.location import location_ui
 from web.modules.style import style_ui
+from web.modules.user_settings import user_settings_ui
 
 
 def welcome_message(user: dict[str, Any] | None) -> str:
@@ -68,10 +69,23 @@ def home_ui(user: dict[str, Any] | None = None):
         ui.div(
             ui.div(
                 header_ui(user=user),
-                location_ui("location"),
                 class_="hero-panel",
             ),
-            style_ui("style"),
+            ui.navset_pill(
+                ui.nav_panel(
+                    "Outfit",
+                    location_ui("location"),
+                    style_ui("style"),
+                    value="outfit",
+                ),
+                ui.nav_panel(
+                    "User",
+                    user_settings_ui("user_settings", user=user),
+                    value="user",
+                ),
+                id="main_nav",
+                selected="outfit",
+            ),
             class_="app-shell",
         )
     )

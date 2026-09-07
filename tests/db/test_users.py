@@ -11,6 +11,7 @@ class FakeQuery:
         self.filters = []
         self.limit_count = None
         self.inserted = None
+        self.updated = None
 
     def select(self, columns):
         self.columns = columns
@@ -19,6 +20,11 @@ class FakeQuery:
     def insert(self, row):
         self.inserted = row
         self.data = [row]
+        return self
+
+    def update(self, row):
+        self.updated = row
+        self.data = [{**row, "id": "44ef5b7e-e665-4d3c-b956-6ccecbdf7e5c"}]
         return self
 
     def eq(self, column, value):
@@ -156,3 +162,50 @@ def test_create_user_account_requires_names(monkeypatch):
             first_name="New",
             last_name=" ",
         )
+
+
+def test_update_user_profile_updates_profile_fields(monkeypatch):
+    fake_client = FakeSupabase([])
+    monkeypatch.setattr(users, "get_supabase", lambda: fake_client)
+
+    updated_user = users.update_user_profile(
+        user_id="44ef5b7e-e665-4d3c-b956-6ccecbdf7e5c",
+        first_name=" New ",
+        last_name=" User ",
+        is_email_enabled=False,
+    )
+
+    assert fake_client.table_name == "user"
+    assert fake_client.query.updated == {
+        "first_name": "New",
+        "last_name": "User",
+        "is_email_enabled": False,
+    }
+    assert fake_client.query.filters == [
+        ("id", "44ef5b7e-e665-4d3c-b956-6ccecbdf7e5c"),
+    ]
+    assert updated_user["first_name"] == "New"
+    assert updated_user["is_email_enabled"] is False
+
+
+def test_update_user_profile_requires_names(monkeypatch):
+    fake_client = FakeSupabase([])
+    monkeypatch.setattr(users, "get_supabase", lambda: fake_client)
+
+    with pytest.raises(ValueError, match="First name is required"):
+        users.update_user_profile(
+            user_id="44ef5b7e-e665-4d3c-b956-6ccecbdf7e5c",
+            first_name=" ",
+            last_name="User",
+            is_email_enabled=True,
+        )
+
+    with pytest.raises(ValueError, match="Last name is required"):
+        users.update_user_profile(
+            user_id="44ef5b7e-e665-4d3c-b956-6ccecbdf7e5c",
+            first_name="New",
+            last_name=" ",
+            is_email_enabled=True,
+        )
+
+    assert fake_client.query is None

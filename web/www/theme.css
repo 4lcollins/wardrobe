@@ -699,6 +699,32 @@ a:hover {
     box-shadow: 0 2px 0 var(--color-primary-shadow);
 }
 
+.nav-pills {
+    gap: 8px;
+    margin: 0 0 18px !important;
+}
+
+.nav-pills .nav-link {
+    color: var(--color-text-strong) !important;
+    background-color: var(--color-surface) !important;
+    border: 2px solid var(--color-border) !important;
+    border-radius: var(--radius-md) !important;
+    font-weight: 800;
+}
+
+.nav-pills .nav-link:hover,
+.nav-pills .nav-link:focus {
+    color: var(--color-primary-dark) !important;
+    background-color: var(--color-surface-alt) !important;
+    border-color: var(--color-border-strong) !important;
+}
+
+.nav-pills .nav-link.active {
+    color: #ffffff !important;
+    background-color: var(--color-primary) !important;
+    border-color: var(--color-primary-dark) !important;
+}
+
 .btn-secondary {
     background-color: #849b82 !important;
     background-color: var(--color-secondary) !important;
@@ -1028,6 +1054,83 @@ a:hover {
 
 .login-alert {
     margin-bottom: 18px;
+}
+
+.user-settings-wrap {
+    max-width: 520px;
+    margin: 0 auto;
+}
+
+.user-settings-card {
+    text-align: left;
+}
+
+.user-settings-name-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.user-settings-name-grid .shiny-input-container {
+    width: 100%;
+}
+
+.user-settings-readonly-field {
+    display: grid;
+    gap: 6px;
+    margin-bottom: 18px;
+}
+
+.user-settings-readonly-label {
+    color: var(--color-text-strong);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.user-settings-readonly-value {
+    min-height: 46px;
+    padding: 10px 12px;
+
+    color: var(--color-text-muted);
+    background-color: var(--color-surface-alt);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-md);
+
+    font-size: 0.95rem;
+}
+
+.user-settings-preference-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 0 0 18px;
+    padding: 14px 0;
+
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.user-settings-preference-row strong {
+    color: var(--color-text-strong);
+    font-size: 0.95rem;
+}
+
+.user-settings-preference-row .shiny-input-container,
+.user-settings-preference-row .form-group {
+    width: auto;
+    min-width: 86px;
+    margin: 0;
+}
+
+.user-settings-alert {
+    margin-bottom: 18px;
+}
+
+.user-settings-alert-success {
+    color: var(--color-secondary-dark);
+    background-color: color-mix(in srgb, var(--color-secondary) 14%, var(--color-surface));
+    border-color: var(--color-secondary);
 }
 
 
@@ -1611,6 +1714,11 @@ html.shiny-busy::before {
     }
 
     .login-name-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .user-settings-name-grid {
         grid-template-columns: 1fr;
         gap: 0;
     }
