@@ -3,6 +3,8 @@
    Shared across Shiny + Email
    ========================================================= */
 
+@import url("https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@600;700;800;900&display=swap");
+
 
 /* =========================================================
    1. LIGHT THEME + DESIGN TOKENS
@@ -52,9 +54,9 @@
         sans-serif;
 
     --font-heading:
-        "Playfair Display",
-        Georgia,
-        serif;
+        "Azeret Mono",
+        "Inter",
+        monospace;
 
     /* Shape */
     --radius-sm: 8px;
@@ -211,7 +213,7 @@ a:hover {
 
     font-size: clamp(2.1rem, 5vw, 2.8rem);
     font-weight: 700;
-    letter-spacing: -0.5px;
+    letter-spacing: 0;
     line-height: 1.05;
     margin: 0;
 }
@@ -219,9 +221,10 @@ a:hover {
 .hero-kicker {
     color: #d0a078 !important;
 
+    font-family: var(--font-heading);
     font-size: 13px;
     font-weight: 800;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
 
     margin: 8px 0 0;
@@ -242,9 +245,10 @@ a:hover {
 .section-title {
     color: #d0a078;
 
+    font-family: var(--font-heading);
     font-size: 12px;
     font-weight: 900;
-    letter-spacing: 0.08em;
+    letter-spacing: 0;
     text-transform: uppercase;
 
     margin: 0 0 12px;
@@ -335,6 +339,7 @@ a:hover {
 .header-actions .sub-header {
     margin: 0;
     white-space: nowrap;
+    font-family: var(--font-heading);
     font-weight: 800;
 }
 
@@ -456,6 +461,7 @@ a:hover {
     border-radius: 50rem;
     border-radius: var(--radius-pill);
 
+    font-family: var(--font-heading);
     font-size: 14px;
     font-weight: 700;
 }
@@ -511,6 +517,7 @@ a:hover {
     padding: 10px 12px;
     margin-bottom: 16px;
 
+    font-family: var(--font-heading);
     font-size: 13px;
     font-weight: 700;
 }
@@ -593,12 +600,15 @@ a:hover {
    9. FORMS
    ========================================================= */
 
-.form-label {
+label,
+.form-label,
+.control-label {
     color: #3b2f27 !important;
     color: var(--color-text-strong) !important;
 
+    font-family: var(--font-heading);
     font-size: 13px;
-    font-weight: 800;
+    font-weight: 700;
 }
 
 .form-control,
@@ -652,8 +662,9 @@ a:hover {
     border-radius: 12px !important;
     border-radius: var(--radius-md) !important;
 
-    font-weight: 800;
-    letter-spacing: 0.01em;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    letter-spacing: 0;
 
     transition:
         transform 0.08s ease,
@@ -725,7 +736,8 @@ a:hover {
     background-color: transparent !important;
     border: 0 !important;
     border-radius: calc(var(--radius-md) - 4px) !important;
-    font-weight: 800;
+    font-family: var(--font-heading);
+    font-weight: 700;
     text-align: center;
 }
 
@@ -953,6 +965,7 @@ a:hover {
     border: 1px solid var(--color-border);
     border-radius: var(--radius-sm);
 
+    font-family: var(--font-heading);
     font-size: 0.72rem;
     font-weight: 800;
     text-transform: uppercase;
@@ -1020,6 +1033,7 @@ a:hover {
 
 .login-preference-copy strong {
     color: var(--color-text-strong);
+    font-family: var(--font-heading);
     font-size: 0.95rem;
 }
 
@@ -1099,6 +1113,7 @@ a:hover {
 
 .settings-readonly-label {
     color: var(--color-text-strong);
+    font-family: var(--font-heading);
     font-size: 13px;
     font-weight: 800;
 }
@@ -1112,6 +1127,7 @@ a:hover {
     border: 2px solid var(--color-border);
     border-radius: var(--radius-md);
 
+    font-family: var(--font-heading);
     font-size: 0.95rem;
 }
 
@@ -1129,6 +1145,7 @@ a:hover {
 
 .settings-preference-row strong {
     color: var(--color-text-strong);
+    font-family: var(--font-heading);
     font-size: 0.95rem;
 }
 
@@ -1289,6 +1306,7 @@ html.shiny-busy::before {
     color: #a89985;
     color: var(--color-text-faint);
 
+    font-family: var(--font-heading);
     font-size: 11px;
 }
 
@@ -1375,6 +1393,7 @@ html.shiny-busy::before {
     color: #8c7a6b;
     color: var(--color-text-muted);
 
+    font-family: var(--font-heading);
     font-size: 13px;
     font-weight: 600;
 
@@ -1421,6 +1440,7 @@ html.shiny-busy::before {
     color: #9c6b43;
     color: var(--color-accent);
 
+    font-family: var(--font-heading);
     font-size: 15px;
     font-weight: 800;
 
