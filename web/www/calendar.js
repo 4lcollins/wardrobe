@@ -14,6 +14,13 @@
     const displayHour = hour % 12 || 12;
     return `${displayHour}:${String(minute).padStart(2, "0")} ${period}`;
   };
+  const formatRange = (start, end) => {
+    const startLabel = formatTime(start);
+    const endLabel = formatTime(end);
+    return startLabel.slice(-2) === endLabel.slice(-2)
+      ? `${startLabel.slice(0, -3)}–${endLabel}`
+      : `${startLabel}–${endLabel}`;
+  };
 
   function render(editor) {
     activeEditor = editor;
@@ -30,7 +37,7 @@
             const height = Math.max((end - start) / 60 * hourHeight, 28);
             return `<article class="calendar-block calendar-color-${blockIndex % 4}" data-day="${index}" data-block="${blockIndex}" style="top:${top}px;height:${height}px">
               <input class="calendar-block-name" aria-label="${day} block name" value="${escapeHtml(block.name)}">
-              <span class="calendar-block-time">${formatTime(start)}–${formatTime(end)}</span>
+              <span class="calendar-block-time">${formatRange(start, end)}</span>
               <button type="button" class="calendar-delete" aria-label="Delete ${escapeHtml(block.name)}">×</button>
               <span class="calendar-resize" aria-label="Resize block"></span>
             </article>`;
@@ -109,7 +116,7 @@
     const end = toMinutes(block.end_hour);
     drag.block.style.top = `${start / 60 * hourHeight}px`;
     drag.block.style.height = `${Math.max((end - start) / 60 * hourHeight, 28)}px`;
-    drag.block.querySelector(".calendar-block-time").textContent = `${formatTime(start)}–${formatTime(end)}`;
+    drag.block.querySelector(".calendar-block-time").textContent = formatRange(start, end);
     publish();
   });
   document.addEventListener("pointerup", () => {

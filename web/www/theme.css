@@ -1881,7 +1881,7 @@ html.shiny-busy::before {
         var(--color-border) 47px,
         var(--color-border) 48px
     );
-    touch-action: none;
+    touch-action: pan-x pan-y pinch-zoom;
 }
 
 .calendar-hour {
@@ -1918,7 +1918,7 @@ html.shiny-busy::before {
     background: var(--calendar-block-bg, color-mix(in srgb, var(--color-secondary) 32%, var(--color-surface)));
     box-shadow: 0 3px 0 var(--calendar-block-border, var(--color-secondary-dark));
     cursor: grab;
-    touch-action: none;
+    touch-action: pan-x;
 }
 
 .calendar-color-0 {
@@ -1980,10 +1980,11 @@ html.shiny-busy::before {
     right: 0.25rem;
     bottom: 0.1rem;
     left: 0.25rem;
-    height: 0.45rem;
+    height: 0.7rem;
     border-radius: var(--radius-pill);
     background: color-mix(in srgb, var(--calendar-block-border) 48%, transparent);
     cursor: ns-resize;
+    touch-action: none;
 }
 
 .calendar-message {
@@ -2002,5 +2003,25 @@ html.shiny-busy::before {
     .calendar-week {
         min-width: 1050px;
         gap: 0.45rem;
+    }
+    .calendar-add {
+        width: 2.25rem;
+        height: 2.25rem;
+    }
+    .calendar-delete {
+        width: 2rem;
+        height: 2rem;
+        background: transparent;
+        border-color: transparent;
+        box-shadow: none;
+        align-items: start;
+    }
+    .calendar-block-time {
+        padding-right: 2rem;
+        font-size: 0.55rem;
+        white-space: nowrap;
+    }
+    .calendar-resize {
+        height: 1.25rem;
     }
 }
