@@ -37,7 +37,6 @@ DEFAULT_TIME_OF_DAY_PERIODS = [
     TimeOfDayPeriod("Work", 7, 17),
     TimeOfDayPeriod("Evening", 17, 23),
 ]
-WEEKDAYS = ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
 DEFAULT_WEEKLY_PERIODS = {
     day: (
         [TimeOfDayPeriod("Weekend", 7, 23)]
@@ -58,11 +57,13 @@ def _format_forecast_date(forecast_date: date, forecast_start_date: date) -> str
 
 class Calendar:
     def __init__(self, periods: dict[int | str, list[TimeOfDayPeriod]] | None = None):
-        self.weekly_periods = (
-            {int(day): blocks for day, blocks in periods.items()}
-            if periods
-            else {day: blocks.copy() for day, blocks in DEFAULT_WEEKLY_PERIODS.items()}
-        )
+        self.weekly_periods = {
+            day: blocks.copy() for day, blocks in DEFAULT_WEEKLY_PERIODS.items()
+        }
+        if periods:
+            self.weekly_periods.update(
+                {int(day): blocks for day, blocks in periods.items()}
+            )
         self.time_of_day_periods = DEFAULT_TIME_OF_DAY_PERIODS
 
     def periods_for_date(self, day: date) -> list[TimeOfDayPeriod]:

@@ -2,6 +2,9 @@ from typing import Any
 
 from src.db.client import get_supabase
 
+USER_COLUMNS = "id,created_at,email,first_name,last_name,is_email_enabled"
+
+
 class DuplicateUserError(ValueError):
     pass
 
@@ -23,7 +26,7 @@ def list_email_enabled_users() -> list[dict[str, Any]]:
     response = (
         get_supabase()
         .table("user")
-        .select("*")
+        .select(USER_COLUMNS)
         .eq("is_email_enabled", True)
         .order("email")
         .execute()
@@ -40,7 +43,7 @@ def get_user_by_email(email: str) -> dict[str, Any] | None:
     response = (
         get_supabase()
         .table("user")
-        .select("*")
+        .select(USER_COLUMNS)
         .eq("email", normalized_email)
         .limit(1)
         .execute()

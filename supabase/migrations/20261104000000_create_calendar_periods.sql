@@ -1,5 +1,3 @@
-drop table if exists public.calendar cascade;
-
 create table public.calendar (
     user_id uuid not null references public."user"(id) on delete cascade,
     weekday smallint not null check (weekday between 0 and 6),
