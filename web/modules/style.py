@@ -1,6 +1,8 @@
 from shiny import module, reactive, render, ui
 
 from src.core import Calendar, Stylist, Thermometer
+from src.core.calendar import TimeOfDayPeriod
+from src.db.calendar import get_week_template
 
 
 @module.ui
@@ -41,6 +43,7 @@ def style_server(
     output,
     session,
     get_resolved_location,
+    get_user,
 ):
     @reactive.calc
     @reactive.event(input.run_btn)
@@ -53,7 +56,13 @@ def style_server(
                 "Choose a valid location before creating today's style recommendation."
             )
 
-        calendar = Calendar()
+        user = get_user() or {}
+        template = get_week_template(user["id"])
+        periods = {
+            day: [TimeOfDayPeriod(**period) for period in day_periods]
+            for day, day_periods in (template or {}).items()
+        }
+        calendar = Calendar(periods or None)
         thermometer = Thermometer(
             location=location,
         )
@@ -117,8 +126,7 @@ def style_server(
 
         outfit_cards = []
 
-        for index, period in enumerate(periods):
-            accent_class = "morning" if index == 0 else "midday"
+        for period in periods:
             clothing_options = period["clothing_options"]
 
             item_count = period.get(
@@ -130,7 +138,8 @@ def style_server(
                 ui.div(
                     ui.div(
                         ui.h4(
-                            f"{period['display_date']} {period['name']}",
+                            f"{period['display_date']} {period['name']} ",
+                            ui.tags.small(period["time"], class_="outfit-period-time"),
                             class_="outfit-title",
                         ),
 
@@ -153,6 +162,7 @@ def style_server(
                         f"{item_count} pieces",
                         class_="outfit-pieces",
                     ),
+                    ui.p(period["adjustment"], class_="weather-caption") if period.get("adjustment") else None,
 
                     ui.tags.ul(
                         *(
@@ -162,7 +172,7 @@ def style_server(
                         class_="outfit-list",
                     ),
 
-                    class_=f"outfit-box {accent_class}",
+                    class_=f"outfit-box calendar-color-{period['color_index']}",
                 )
             )
 

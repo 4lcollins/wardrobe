@@ -8,6 +8,7 @@ from web.modules.login import login_ui
 
 
 css_path = Path(__file__).parent / "www" / "theme.css"
+calendar_js_path = Path(__file__).parent / "www" / "calendar.js"
 
 
 def page_content_ui(
@@ -23,5 +24,6 @@ def page_content_ui(
 app_ui = ui.page_fluid(
     ui.busy_indicators.use(spinners=False, pulse=False),
     ui.include_css(css_path),
+    ui.include_js(calendar_js_path),
     ui.output_ui("page_content"),
 )

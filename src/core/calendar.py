@@ -5,35 +5,47 @@ from datetime import date, datetime, timedelta
 @dataclass(frozen=True)
 class TimeOfDayPeriod:
     name: str
-    start_hour: int
-    end_hour: int
+    start_hour: float
+    end_hour: float
 
     def contains(self, hour: int) -> bool:
         if self.start_hour <= self.end_hour:
             return self.start_hour <= hour < self.end_hour
         return hour >= self.start_hour or hour < self.end_hour
 
+
 @dataclass(frozen=True)
 class ForecastPeriod:
     period: TimeOfDayPeriod
     date: date
     display_date: str
+    position: int = 0
 
     @property
     def name(self) -> str:
         return self.period.name
 
     def contains(self, forecast_datetime: datetime) -> bool:
-        return (
-            forecast_datetime.date() == self.date
-            and self.period.contains(forecast_datetime.hour)
-        )
+        hour = forecast_datetime.hour
+        period_date = forecast_datetime.date()
+        if self.period.start_hour > self.period.end_hour and hour < self.period.end_hour:
+            period_date -= timedelta(days=1)
+        return period_date == self.date and self.period.contains(hour)
+
 
 DEFAULT_TIME_OF_DAY_PERIODS = [
-    TimeOfDayPeriod("Morning", 7, 12),
-    TimeOfDayPeriod("Afternoon", 12, 17),
-    TimeOfDayPeriod("Evening", 17, 24),
+    TimeOfDayPeriod("Work", 7, 17),
+    TimeOfDayPeriod("Evening", 17, 23),
 ]
+DEFAULT_WEEKLY_PERIODS = {
+    day: (
+        [TimeOfDayPeriod("Weekend", 7, 23)]
+        if day >= 5
+        else DEFAULT_TIME_OF_DAY_PERIODS.copy()
+    )
+    for day in range(7)
+}
+
 
 def _format_forecast_date(forecast_date: date, forecast_start_date: date) -> str:
     if forecast_date == forecast_start_date:
@@ -44,51 +56,44 @@ def _format_forecast_date(forecast_date: date, forecast_start_date: date) -> str
 
 
 class Calendar:
-    def __init__(self):
+    def __init__(self, periods: dict[int | str, list[TimeOfDayPeriod]] | None = None):
+        self.weekly_periods = {
+            day: blocks.copy() for day, blocks in DEFAULT_WEEKLY_PERIODS.items()
+        }
+        if periods:
+            self.weekly_periods.update(
+                {int(day): blocks for day, blocks in periods.items()}
+            )
         self.time_of_day_periods = DEFAULT_TIME_OF_DAY_PERIODS
+
+    def periods_for_date(self, day: date) -> list[TimeOfDayPeriod]:
+        return self.weekly_periods[day.weekday()]
 
     def map_forecast_to_periods(
         self,
         forecast_start: datetime,
         forecast_datetimes: list[datetime],
     ) -> list[ForecastPeriod]:
-        """
-        Return configured periods that have at least one hourly forecast row.
-
-        Periods that already ended on the forecast-local current date are skipped.
-        Future dates are limited to dates present in the returned hourly forecast.
-        """
-        if not forecast_datetimes:
-            return []
-
-        forecast_start_date = forecast_start.date()
+        """Return scheduled blocks with at least one upcoming forecast hour."""
         periods = []
-
+        seen = set()
+        current_hour = forecast_start.replace(minute=0, second=0, microsecond=0)
         for forecast_datetime in forecast_datetimes:
+            if forecast_datetime < current_hour:
+                continue
             forecast_date = forecast_datetime.date()
-
-            for period in self.time_of_day_periods:
-                is_upcoming = (
-                    forecast_date != forecast_start_date
-                    or period.end_hour > forecast_start.hour
-                )
-                has_forecast_hour = period.contains(forecast_datetime.hour)
-                is_already_added = any(
-                    existing.period == period
-                    and existing.date == forecast_date
-                    for existing in periods
-                )
-
-                if is_upcoming and has_forecast_hour and not is_already_added:
-                    periods.append(
-                        ForecastPeriod(
-                            period=period,
-                            date=forecast_date,
-                            display_date=_format_forecast_date(
-                                forecast_date,
-                                forecast_start_date,
-                            ),
-                        )
+            for period_date in (forecast_date - timedelta(days=1), forecast_date):
+                for position, period in enumerate(self.periods_for_date(period_date)):
+                    key = (period_date, period)
+                    if key in seen:
+                        continue
+                    forecast_period = ForecastPeriod(
+                        period,
+                        period_date,
+                        _format_forecast_date(period_date, forecast_start.date()),
+                        position,
                     )
-
+                    if forecast_period.contains(forecast_datetime):
+                        periods.append(forecast_period)
+                        seen.add(key)
         return periods

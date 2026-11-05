@@ -58,6 +58,7 @@ def settings_server(
     output,
     session,
     get_user: Callable[[], dict[str, Any] | None],
+    set_user: Callable[[dict[str, Any]], None] | None = None,
 ):
     message = reactive.Value(None)
     message_kind = reactive.Value("success")
@@ -88,7 +89,7 @@ def settings_server(
             return
 
         try:
-            update_user_profile(
+            updated_user = update_user_profile(
                 user_id=user_id,
                 first_name=first_name,
                 last_name=last_name,
@@ -101,6 +102,8 @@ def settings_server(
             _set_message("Could not save settings", "error")
             return
 
+        if set_user:
+            set_user({**user, **updated_user})
         _set_message("Settings saved")
 
     @output

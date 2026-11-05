@@ -5,6 +5,8 @@ from shiny import ui
 from web.modules.location import location_ui
 from web.modules.style import style_ui
 from web.modules.settings import settings_ui
+from web.modules.calendar import calendar_ui
+from src.db.calendar import get_week_template
 
 
 def welcome_message(user: dict[str, Any] | None) -> str:
@@ -78,6 +80,15 @@ def home_ui(user: dict[str, Any] | None = None):
                         "Style",
                         style_ui("style"),
                         value="style",
+                    ),
+                    ui.nav_panel(
+                        "Calendar",
+                        calendar_ui(
+                            "calendar",
+                            template=get_week_template(user["id"])
+                            if user and user.get("id") else None,
+                        ),
+                        value="calendar",
                     ),
                     ui.nav_panel(
                         "Settings",

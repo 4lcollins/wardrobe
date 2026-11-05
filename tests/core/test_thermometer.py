@@ -61,7 +61,5 @@ class TestGetPeriodTemperatures:
             }
             for item in period_temperatures
         ] == [
-            {"period": "Morning", "temperature": 50},
-            {"period": "Afternoon", "temperature": 70},
-            {"period": "Evening", "temperature": 60},
+            {"period": "Weekend", "temperature": 60},
         ]
