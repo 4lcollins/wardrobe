@@ -47,6 +47,8 @@ def calendar_server(input, output, session, get_user: Callable[[], dict[str, Any
             return
         try:
             template = json.loads(input.calendar_data())
+            if not any(template.values()):
+                raise ValueError("Add at least one block to your week.")
             for day, blocks in template.items():
                 if not 0 <= int(day) < 7:
                     raise ValueError("Choose a valid day.")
