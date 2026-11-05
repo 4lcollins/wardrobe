@@ -7,6 +7,8 @@ from src.core import (
     Stylist,
     Thermometer,
     )
+from src.core.calendar import TimeOfDayPeriod
+from src.db.calendar import get_week_template
 from src.db.users import list_email_enabled_users
 from src.utils.email import send_email
 from src.utils.template import render_template
@@ -30,27 +32,31 @@ def run():
     if not users:
         return
 
-    calendar = Calendar()
     location = Location(city="Provo", state_abbr="UT")
     thermometer = Thermometer(location=location)
     stylist = Stylist(thermometer=thermometer)
 
     city = "Provo"
     state = "UT"
-
-    recommendation = stylist.recommend_clothing(calendar)
-
-    message = render_template(
-        "src/templates/daily_outfit.html",
-        use_email_css=True,
-        city=city,
-        state=state,
-        icon=email_icon(),
-        time_periods=recommendation["time_periods"],
-        insight=recommendation["insight"],
-    )
+    icon = email_icon()
 
     for user in users:
+        template = get_week_template(user["id"])
+        periods = {
+            int(day): [TimeOfDayPeriod(**period) for period in day_periods]
+            for day, day_periods in (template or {}).items()
+        }
+        calendar = Calendar(periods or None)
+        recommendation = stylist.recommend_clothing(calendar)
+        message = render_template(
+            "src/templates/daily_outfit.html",
+            use_email_css=True,
+            city=city,
+            state=state,
+            icon=icon,
+            time_periods=recommendation["time_periods"],
+            insight=recommendation["insight"],
+        )
         send_email(
             subject="Your Daily Outfit",
             body=message,

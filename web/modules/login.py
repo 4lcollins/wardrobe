@@ -1,3 +1,5 @@
+import logging
+
 from shiny import module, reactive, render, ui
 
 from src.db.users import (
@@ -5,6 +7,8 @@ from src.db.users import (
     create_user_account,
     get_user_by_email,
 )
+
+logger = logging.getLogger(__name__)
 
 
 LOGIN_ART = [
@@ -39,6 +43,9 @@ class LoginState:
 
     def get_user(self):
         return self.current_user.get()
+
+    def set_user(self, user):
+        self.current_user.set(user)
 
     def clear(self):
         self.current_user.set(None)
@@ -110,6 +117,7 @@ def login_server(input, output, session):
         try:
             user = get_user_by_email(email)
         except Exception:
+            logger.exception("Unable to look up user during login")
             login_error_message.set("Login is temporarily unavailable. Try again soon.")
             return
 

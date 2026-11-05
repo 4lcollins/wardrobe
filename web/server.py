@@ -4,6 +4,7 @@ from web.modules.login import login_server
 from web.modules.location import location_server
 from web.modules.style import style_server
 from web.modules.settings import settings_server
+from web.modules.calendar import calendar_server
 from web.ui import page_content_ui
 
 
@@ -14,12 +15,14 @@ def app_server(input, output, session):
     resolved_location_getter = location_server("location")
 
     # Pass the location tracker down to the recommendation module server
-    style_server("style", get_resolved_location=resolved_location_getter)
+    style_server("style", get_resolved_location=resolved_location_getter, get_user=login_state.get_user)
 
     settings_server(
         "settings",
         get_user=login_state.get_user,
+        set_user=login_state.set_user,
     )
+    calendar_server("calendar", get_user=login_state.get_user)
 
     @reactive.effect
     @reactive.event(input.logout_btn)

@@ -1,6 +1,7 @@
 import logging
 import math
 import random
+from itertools import groupby
 
 from pydantic import BaseModel
 
@@ -9,6 +10,14 @@ from src.core.thermometer import Thermometer
 from src.utils.llm import Prompt
 
 logger = logging.getLogger(__name__)
+
+
+def _format_period_time(hour: float) -> str:
+    minutes = round(hour * 60)
+    hour_24 = (minutes // 60) % 24
+    suffix = "AM" if hour_24 < 12 else "PM"
+    hour_12 = hour_24 % 12 or 12
+    return f"{hour_12}:{minutes % 60:02d} {suffix}"
 
 class ClothingRecommendation(BaseModel):
     insight: str
@@ -72,16 +81,15 @@ class Stylist:
         """
         Returns a random clothing option for a given number of pieces.
         """
-        options = self.CLOTHING_OPTIONS.get(num_clothing_pieces, [])
-        if options and isinstance(options[0], list):
-            return random.choice(options)
-        return options
+        return random.choice(self.CLOTHING_OPTIONS[num_clothing_pieces])
 
     def _get_clothing_options(self, num_clothing_pieces: list[int]) -> list[list[str]]:
         """
         Returns clothing options for each period, ensuring warmer periods
         are subsets of the coldest period's outfit to avoid mid-day wardrobe changes.
         """
+        if not num_clothing_pieces:
+            return []
         max_pieces = max(num_clothing_pieces)
         master_outfit = self._get_clothing_option(max_pieces)
 
@@ -91,15 +99,21 @@ class Stylist:
                 result.append(master_outfit)
                 continue
 
-            possibilities = self.CLOTHING_OPTIONS.get(num_pieces, [])
-            if possibilities and isinstance(possibilities[0], list):
-                valid_subsets = [
-                    p for p in possibilities
-                    if all(item in master_outfit for item in p)
-                ]
-                outfit = random.choice(valid_subsets) if valid_subsets else possibilities[0]
+            possibilities = self.CLOTHING_OPTIONS[num_pieces]
+            valid_subsets = [
+                option for option in possibilities
+                if all(item in master_outfit for item in option)
+            ]
+            if valid_subsets:
+                outfit = random.choice(valid_subsets)
             else:
-                outfit = possibilities
+                target_size = min(len(option) for option in possibilities)
+                outfit = master_outfit.copy()
+                for item in ("Gloves", "Coat", "Jacket", "Socks"):
+                    if len(outfit) <= target_size:
+                        break
+                    if item in outfit:
+                        outfit.remove(item)
 
             result.append(outfit)
 
@@ -110,31 +124,46 @@ class Stylist:
         Recommends clothing items for each configured time-of-day period.
         """
         period_temperatures = self.thermometer.get_period_temperatures(calendar)
-        temperatures = [
-            period_temperature["temperature"]
-            for period_temperature in period_temperatures
-        ]
-        num_clothing_pieces = self._get_num_clothing_pieces(temperatures)
-        clothing_options = self._get_clothing_options(num_clothing_pieces)
+        time_periods = []
+        for _, grouped in groupby(period_temperatures, key=lambda item: item["period"].date):
+            daily_periods = list(grouped)
+            sizes = self._get_num_clothing_pieces(
+                [item["temperature"] for item in daily_periods]
+            )
+            outfits = self._get_clothing_options(sizes)
+            previous = None
+            for period_temperature, num_pieces, outfit in zip(daily_periods, sizes, outfits):
+                removed = [item for item in previous or [] if item not in outfit]
+                added = [item for item in outfit if previous is not None and item not in previous]
+                changes = []
+                if removed:
+                    changes.append(f"Remove {', '.join(removed)}")
+                if added:
+                    changes.append(f"Add {', '.join(added)}")
+                time_periods.append({
+                    "name": period_temperature["period"].name,
+                    "color_index": getattr(period_temperature["period"], "position", 0) % 4,
+                    "time": (
+                        f"{_format_period_time(period_temperature['period'].period.start_hour)}–"
+                        f"{_format_period_time(period_temperature['period'].period.end_hour)}"
+                    ),
+                    "display_date": period_temperature["period"].display_date,
+                    "temperature": period_temperature["temperature"],
+                    "num_clothing_pieces": num_pieces,
+                    "clothing_options": outfit,
+                    "adjustment": "; ".join(changes),
+                })
+                previous = outfit
 
-        time_periods = [
-            {
-                "name": period_temperature["period"].name,
-                "display_date": period_temperature["period"].display_date,
-                "temperature": period_temperature["temperature"],
-                "num_clothing_pieces": num_pieces,
-                "clothing_options": clothing_option,
-            }
-            for period_temperature, num_pieces, clothing_option
-            in zip(period_temperatures, num_clothing_pieces, clothing_options)
-        ]
+        if not time_periods:
+            return {"time_periods": [], "insight": None}
 
         prompt_content = (
             f"CONTEXT:\n"
             f"Time of Day Periods: {time_periods}\n\n"
             f"TASK:\n"
             f"You are a stylist. In a few sentences, explain how the user can dress for each part of the day.\n\n"
-            f"All of the clothing options come from the same master outfit. So, don't suggest switching actual items for other items of different materials, for example. "
+            f"The clothing options for each date come from one master outfit. So, don't suggest switching actual items for other items of different materials, for example. "
             f"Focus on simple transitions between periods. Don't build or even mention transitions for periods that do not change items. "
             f"For example, don't suggest to switch to the same outfit between periods.\n\n"
             f"Only make suggestions from the clothing options given to you. Do not fabricate additional items."

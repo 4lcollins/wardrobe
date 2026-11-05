@@ -38,11 +38,11 @@
 
     <div class="section-title">👕 Recommended Outfits</div>
     {% for period in time_periods %}
-    <div class="outfit-box {% if loop.index == 1 %}morning{% else %}midday{% endif %}">
+    <div class="outfit-box calendar-color-{{ period.color_index }}">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
             <tr>
                 <td>
-                    <div class="outfit-title">{{ period.display_date }} {{ period.name }} Outfit</div>
+                    <div class="outfit-title">{{ period.display_date }} {{ period.name }} Outfit <small class="outfit-period-time">{{ period.time }}</small></div>
                 </td>
                 <td align="right">
                     <div class="outfit-temperature">{{ period.temperature }}°F</div>
@@ -53,6 +53,7 @@
         <div class="outfit-pieces">
             {{ period.num_clothing_pieces }} pieces
         </div>
+        {% if period.adjustment %}<div class="weather-caption">{{ period.adjustment }}</div>{% endif %}
         <ul class="outfit-list">
             {% for item in period.clothing_options %}
             <li>{{ item }}</li>

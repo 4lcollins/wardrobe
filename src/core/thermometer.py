@@ -73,6 +73,11 @@ class Thermometer:
             hourly_temperature,
             timezone_offset_seconds,
         )
+        forecast_hours = [
+            hour for hour in forecast_hours
+            if hour["datetime"] >= forecast_start.replace(minute=0, second=0, microsecond=0)
+            and isinstance(hour["feels_like"], (int, float))
+        ]
         forecast_datetimes = [
             forecast_hour["datetime"]
             for forecast_hour in forecast_hours

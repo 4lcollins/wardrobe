@@ -1,5 +1,6 @@
 from datetime import date
 
+from src.core.calendar import TimeOfDayPeriod
 from src.core.stylist import Stylist
 
 
@@ -10,6 +11,7 @@ class TestRecommendClothing:
                 self.name = name
                 self.date = date(2026, 6, 7)
                 self.display_date = "Today"
+                self.period = TimeOfDayPeriod(name, 7, 12)
 
         class FakeThermometer:
             def get_period_temperatures(self, calendar=None):
@@ -35,3 +37,5 @@ class TestRecommendClothing:
             for period in recommendation["time_periods"]
         ] == ["Today", "Today"]
         assert recommendation["insight"] == "Layer up, then simplify."
+        assert recommendation["time_periods"][1]["adjustment"]
+        assert recommendation["time_periods"][0]["time"] == "7:00 AM–12:00 PM"
